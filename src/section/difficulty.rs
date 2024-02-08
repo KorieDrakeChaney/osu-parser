@@ -1,4 +1,4 @@
-use crate::token::DifficultyToken;
+use crate::{token::DifficultyToken, Beatmap};
 #[derive(Debug)]
 pub struct Difficulty {
     hp_drain_rate: f32,
@@ -7,6 +7,32 @@ pub struct Difficulty {
     approach_rate: f32,
     slider_multiplier: f32,
     slider_tick_rate: f32,
+}
+
+impl Difficulty {
+    pub fn change_hp_drain_rate(&mut self, rate: f32) {
+        self.hp_drain_rate = rate;
+    }
+
+    pub fn change_circle_size(&mut self, size: f32) {
+        self.circle_size = size;
+    }
+
+    pub fn change_overall_difficulty(&mut self, difficulty: f32) {
+        self.overall_difficulty = difficulty;
+    }
+
+    pub fn change_approach_rate(&mut self, rate: f32) {
+        self.approach_rate = rate;
+    }
+
+    pub fn change_slider_multiplier(&mut self, multiplier: f32) {
+        self.slider_multiplier = multiplier;
+    }
+
+    pub fn change_slider_tick_rate(&mut self, rate: f32) {
+        self.slider_tick_rate = rate;
+    }
 }
 
 impl From<&Vec<DifficultyToken>> for Difficulty {
@@ -49,5 +75,31 @@ impl std::fmt::Display for Difficulty {
         write!(f, "ApproachRate: {}\n", self.approach_rate)?;
         write!(f, "SliderMultiplier: {}\n", self.slider_multiplier)?;
         write!(f, "SliderTickRate: {}", self.slider_tick_rate)
+    }
+}
+
+impl Beatmap {
+    pub fn change_hp_drain_rate(&mut self, rate: f32) {
+        self.difficulty.change_hp_drain_rate(rate);
+    }
+
+    pub fn change_circle_size(&mut self, size: f32) {
+        self.difficulty.change_circle_size(size);
+    }
+
+    pub fn change_overall_difficulty(&mut self, difficulty: f32) {
+        self.difficulty.change_overall_difficulty(difficulty);
+    }
+
+    pub fn change_approach_rate(&mut self, rate: f32) {
+        self.difficulty.change_approach_rate(rate);
+    }
+
+    pub fn change_slider_multiplier(&mut self, multiplier: f32) {
+        self.difficulty.change_slider_multiplier(multiplier);
+    }
+
+    pub fn change_slider_tick_rate(&mut self, rate: f32) {
+        self.difficulty.change_slider_tick_rate(rate);
     }
 }

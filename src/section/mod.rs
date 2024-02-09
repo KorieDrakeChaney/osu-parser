@@ -10,7 +10,7 @@ mod timing_point;
 pub use colour::Colour;
 pub use difficulty::Difficulty;
 pub use editor::Editor;
-pub use events::Events;
+pub use events::{Command, Events, Storyboard};
 pub use general::General;
 pub use hit_object::HitObject;
 pub use metadata::Metadata;

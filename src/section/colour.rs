@@ -1,17 +1,23 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Color {
     r: i32,
     g: i32,
     b: i32,
 }
 
+impl Color {
+    pub fn new(r: i32, g: i32, b: i32) -> Self {
+        Color { r, g, b }
+    }
+}
+
 impl From<&str> for Color {
     fn from(s: &str) -> Self {
-        let mut iter = s.split(",");
+        let colors = s.splitn(3, ",").collect::<Vec<&str>>();
         Color {
-            r: iter.next().unwrap().parse().unwrap(),
-            g: iter.next().unwrap().parse().unwrap(),
-            b: iter.next().unwrap().parse().unwrap(),
+            r: colors[0].parse().unwrap(),
+            g: colors[1].parse().unwrap(),
+            b: colors[2].parse().unwrap(),
         }
     }
 }
@@ -29,7 +35,9 @@ pub enum Colour {
 }
 
 impl Colour {
-    pub fn parse(s: &[&str]) -> std::io::Result<Self> {
+    pub fn parse(s: &str) -> std::io::Result<Self> {
+        let s: Vec<&str> = s.split(':').map(|s| s.trim()).collect();
+
         if s[0].contains("Combo") {
             Ok(Colour::ComboColor(
                 s[0][5..].parse().unwrap(),

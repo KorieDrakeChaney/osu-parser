@@ -1,4 +1,3 @@
-use crate::token::EditorToken;
 #[derive(Debug)]
 pub struct Editor {
     bookmarks: Vec<i32>,
@@ -6,45 +5,6 @@ pub struct Editor {
     beat_divisor: i32,
     grid_size: i32,
     timeline_zoom: f32,
-}
-
-impl Editor {
-    pub fn parse(tokens: &Vec<EditorToken>) -> std::io::Result<Self> {
-        let mut bookmarks = Vec::new();
-        let mut distance_spacing = 0.0;
-        let mut beat_divisor = 4;
-        let mut grid_size = 4;
-        let mut timeline_zoom = 1.0;
-
-        for token in tokens {
-            match token {
-                EditorToken::Bookmarks(b) => {
-                    for b in b.split(',') {
-                        if let Ok(n) = b.parse() {
-                            bookmarks.push(n);
-                        } else {
-                            return Err(std::io::Error::new(
-                                std::io::ErrorKind::InvalidInput,
-                                "Invalid Editor token",
-                            ));
-                        }
-                    }
-                }
-                EditorToken::DistanceSpacing(d) => distance_spacing = *d,
-                EditorToken::BeatDivisor(b) => beat_divisor = *b,
-                EditorToken::GridSize(g) => grid_size = *g,
-                EditorToken::TimelineZoom(t) => timeline_zoom = *t,
-            }
-        }
-
-        Ok(Editor {
-            bookmarks,
-            distance_spacing,
-            beat_divisor,
-            grid_size,
-            timeline_zoom,
-        })
-    }
 }
 
 impl std::fmt::Display for Editor {
@@ -59,5 +19,55 @@ impl std::fmt::Display for Editor {
         write!(f, "BeatDivisor: {}\n", self.beat_divisor)?;
         write!(f, "GridSize: {}\n", self.grid_size)?;
         write!(f, "TimelineZoom: {}\n", self.timeline_zoom)
+    }
+}
+
+impl Default for Editor {
+    fn default() -> Self {
+        Editor {
+            bookmarks: Vec::new(),
+            distance_spacing: 0.0,
+            beat_divisor: 4,
+            grid_size: 4,
+            timeline_zoom: 1.0,
+        }
+    }
+}
+
+impl Editor {
+    pub fn parse_value(&mut self, value: &str) {
+        let parts: Vec<&str> = value.split(':').map(|s| s.trim()).collect();
+        let value = parts[1];
+
+        match parts[0] {
+            "Bookmarks" => {
+                for b in value.split(',') {
+                    if let Ok(n) = b.parse() {
+                        self.bookmarks.push(n);
+                    }
+                }
+            }
+            "DistanceSpacing" => {
+                if let Ok(n) = value.parse() {
+                    self.distance_spacing = n;
+                }
+            }
+            "BeatDivisor" => {
+                if let Ok(n) = value.parse() {
+                    self.beat_divisor = n;
+                }
+            }
+            "GridSize" => {
+                if let Ok(n) = value.parse() {
+                    self.grid_size = n;
+                }
+            }
+            "TimelineZoom" => {
+                if let Ok(n) = value.parse() {
+                    self.timeline_zoom = n;
+                }
+            }
+            _ => {}
+        }
     }
 }

@@ -1,4 +1,4 @@
-use crate::{token::MetadataToken, Beatmap};
+use crate::Beatmap;
 #[derive(Debug)]
 pub struct Metadata {
     title: String,
@@ -52,49 +52,6 @@ impl Metadata {
 
     pub fn change_beatmap_set_id(&mut self, id: i32) {
         self.beatmap_set_id = id;
-    }
-}
-
-impl From<&Vec<MetadataToken>> for Metadata {
-    fn from(tokens: &Vec<MetadataToken>) -> Self {
-        let mut title = String::new();
-        let mut title_unicode = String::new();
-        let mut artist = String::new();
-        let mut artist_unicode = String::new();
-        let mut creator = String::new();
-        let mut version = String::new();
-        let mut source = String::new();
-        let mut tags = String::new();
-        let mut beatmap_id = 0;
-        let mut beatmap_set_id = 0;
-
-        for token in tokens {
-            match token {
-                MetadataToken::Title(t) => title = t.to_string(),
-                MetadataToken::TitleUnicode(t) => title_unicode = t.to_string(),
-                MetadataToken::Artist(a) => artist = a.to_string(),
-                MetadataToken::ArtistUnicode(a) => artist_unicode = a.to_string(),
-                MetadataToken::Creator(c) => creator = c.to_string(),
-                MetadataToken::Version(v) => version = v.to_string(),
-                MetadataToken::Source(s) => source = s.to_string(),
-                MetadataToken::Tags(t) => tags = t.to_string(),
-                MetadataToken::BeatmapID(id) => beatmap_id = *id,
-                MetadataToken::BeatmapSetID(id) => beatmap_set_id = *id,
-            }
-        }
-
-        Metadata {
-            title,
-            title_unicode,
-            artist,
-            artist_unicode,
-            creator,
-            version,
-            source,
-            tags,
-            beatmap_id,
-            beatmap_set_id,
-        }
     }
 }
 
@@ -193,5 +150,42 @@ impl Beatmap {
 
     pub fn get_metadata_beatmap_set_id(&self) -> i32 {
         self.metadata.beatmap_set_id
+    }
+}
+
+impl Default for Metadata {
+    fn default() -> Self {
+        Metadata {
+            title: String::new(),
+            title_unicode: String::new(),
+            artist: String::new(),
+            artist_unicode: String::new(),
+            creator: String::new(),
+            version: String::new(),
+            source: String::new(),
+            tags: String::new(),
+            beatmap_id: 0,
+            beatmap_set_id: 0,
+        }
+    }
+}
+
+impl Metadata {
+    pub fn parse_value(&mut self, value: &str) {
+        let parts: Vec<&str> = value.split(':').map(|s| s.trim()).collect();
+        let value = parts[1];
+        match parts[0] {
+            "Title" => self.title = value.to_string(),
+            "TitleUnicode" => self.title_unicode = value.to_string(),
+            "Artist" => self.artist = value.to_string(),
+            "ArtistUnicode" => self.artist_unicode = value.to_string(),
+            "Creator" => self.creator = value.to_string(),
+            "Version" => self.version = value.to_string(),
+            "Source" => self.source = value.to_string(),
+            "Tags" => self.tags = value.to_string(),
+            "BeatmapID" => self.beatmap_id = value.parse().unwrap(),
+            "BeatmapSetID" => self.beatmap_set_id = value.parse().unwrap(),
+            _ => {}
+        }
     }
 }

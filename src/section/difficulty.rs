@@ -1,4 +1,4 @@
-use crate::{token::DifficultyToken, Beatmap};
+use crate::Beatmap;
 #[derive(Debug)]
 pub struct Difficulty {
     hp_drain_rate: f32,
@@ -32,37 +32,6 @@ impl Difficulty {
 
     pub fn change_slider_tick_rate(&mut self, rate: f32) {
         self.slider_tick_rate = rate;
-    }
-}
-
-impl From<&Vec<DifficultyToken>> for Difficulty {
-    fn from(tokens: &Vec<DifficultyToken>) -> Self {
-        let mut hp_drain_rate = 5.0;
-        let mut circle_size = 5.0;
-        let mut overall_difficulty = 5.0;
-        let mut approach_rate = 5.0;
-        let mut slider_multiplier = 1.4;
-        let mut slider_tick_rate = 1.0;
-
-        for token in tokens {
-            match token {
-                DifficultyToken::HPDrainRate(rate) => hp_drain_rate = *rate,
-                DifficultyToken::CircleSize(size) => circle_size = *size,
-                DifficultyToken::OverallDifficulty(difficulty) => overall_difficulty = *difficulty,
-                DifficultyToken::ApproachRate(rate) => approach_rate = *rate,
-                DifficultyToken::SliderMultiplier(multiplier) => slider_multiplier = *multiplier,
-                DifficultyToken::SliderTickRate(rate) => slider_tick_rate = *rate,
-            }
-        }
-
-        Difficulty {
-            hp_drain_rate,
-            circle_size,
-            overall_difficulty,
-            approach_rate,
-            slider_multiplier,
-            slider_tick_rate,
-        }
     }
 }
 
@@ -125,5 +94,34 @@ impl Beatmap {
 
     pub fn get_slider_tick_rate(&self) -> f32 {
         self.difficulty.slider_tick_rate
+    }
+}
+
+impl Default for Difficulty {
+    fn default() -> Self {
+        Difficulty {
+            hp_drain_rate: 5.0,
+            circle_size: 5.0,
+            overall_difficulty: 5.0,
+            approach_rate: 5.0,
+            slider_multiplier: 1.4,
+            slider_tick_rate: 1.0,
+        }
+    }
+}
+
+impl Difficulty {
+    pub fn parse_value(&mut self, value: &str) {
+        let parts: Vec<&str> = value.split(':').map(|s| s.trim()).collect();
+        let value = parts[1];
+        match parts[0] {
+            "HPDrainRate" => self.hp_drain_rate = value.parse().unwrap(),
+            "CircleSize" => self.circle_size = value.parse().unwrap(),
+            "OverallDifficulty" => self.overall_difficulty = value.parse().unwrap(),
+            "ApproachRate" => self.approach_rate = value.parse().unwrap(),
+            "SliderMultiplier" => self.slider_multiplier = value.parse().unwrap(),
+            "SliderTickRate" => self.slider_tick_rate = value.parse().unwrap(),
+            _ => {}
+        }
     }
 }

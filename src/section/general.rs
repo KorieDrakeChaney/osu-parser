@@ -1,6 +1,5 @@
 use std::ffi::OsString;
 
-use crate::token::GeneralToken;
 #[derive(Debug)]
 pub enum SampleSet {
     Normal,
@@ -103,66 +102,25 @@ pub struct General {
     pub samples_match_playback_rate: bool,
 }
 
-impl From<&Vec<GeneralToken>> for General {
-    fn from(tokens: &Vec<GeneralToken>) -> Self {
-        let mut audio_file = OsString::new();
-        let mut audio_lead_in = 0;
-        let mut preview_time = -1;
-        let mut countdown = 1;
-        let mut sample_set = SampleSet::default();
-        let mut stack_leniency = 0.7;
-        let mut mode = 0;
-        let mut letterbox_in_breaks = false;
-        let mut use_skin_sprites = false;
-        let mut overlay_position = OverlayPosition::default();
-        let mut skin_preference = String::new();
-        let mut epilepsy_warning = false;
-        let mut countdown_offset = 0;
-        let mut special_style = false;
-        let mut widescreen_storyboard = false;
-        let mut samples_match_playback_rate = false;
-
-        for token in tokens {
-            match token {
-                GeneralToken::AudioFilename(s) => audio_file = OsString::from(s),
-                GeneralToken::AudioLeadIn(i) => audio_lead_in = *i,
-                GeneralToken::PreviewTime(i) => preview_time = *i,
-                GeneralToken::Countdown(i) => countdown = *i,
-                GeneralToken::SampleSet(s) => sample_set = SampleSet::from(s.as_str()),
-                GeneralToken::StackLeniency(f) => stack_leniency = *f,
-                GeneralToken::Mode(i) => mode = *i,
-                GeneralToken::LetterboxInBreaks(b) => letterbox_in_breaks = *b,
-                GeneralToken::UseSkinSprites(b) => use_skin_sprites = *b,
-                GeneralToken::OverlayPosition(s) => {
-                    overlay_position = OverlayPosition::from(s.as_str())
-                }
-                GeneralToken::SkinPreference(s) => skin_preference = s.clone(),
-                GeneralToken::EpilepsyWarning(b) => epilepsy_warning = *b,
-                GeneralToken::CountdownOffset(i) => countdown_offset = *i,
-                GeneralToken::SpecialStyle(b) => special_style = *b,
-                GeneralToken::WidescreenStoryboard(b) => widescreen_storyboard = *b,
-                GeneralToken::SamplesMatchPlaybackRate(b) => samples_match_playback_rate = *b,
-                _ => {}
-            }
-        }
-
+impl Default for General {
+    fn default() -> Self {
         General {
-            audio_file,
-            audio_lead_in,
-            preview_time,
-            countdown,
-            sample_set,
-            stack_leniency,
-            mode,
-            letterbox_in_breaks,
-            use_skin_sprites,
-            overlay_position,
-            skin_preference,
-            epilepsy_warning,
-            countdown_offset,
-            special_style,
-            widescreen_storyboard,
-            samples_match_playback_rate,
+            audio_file: OsString::new(),
+            audio_lead_in: 0,
+            preview_time: 0,
+            countdown: 0,
+            sample_set: SampleSet::Normal,
+            stack_leniency: 0.7,
+            mode: 0,
+            letterbox_in_breaks: false,
+            use_skin_sprites: false,
+            overlay_position: OverlayPosition::NoChange,
+            skin_preference: String::new(),
+            epilepsy_warning: false,
+            countdown_offset: 0,
+            special_style: false,
+            widescreen_storyboard: false,
+            samples_match_playback_rate: false,
         }
     }
 }
@@ -194,5 +152,75 @@ impl std::fmt::Display for General {
             "SamplesMatchSpeed: {}\n",
             self.samples_match_playback_rate as u8
         )
+    }
+}
+
+impl General {
+    pub fn parse_value(&mut self, value: &str) {
+        let parts: Vec<&str> = value.split(':').map(|s| s.trim()).collect();
+        let value = parts[1];
+        match parts[0] {
+            "AudioFilename" => {
+                self.audio_file = OsString::from(value);
+            }
+            "AudioLeadIn" => {
+                if let Ok(n) = value.parse() {
+                    self.audio_lead_in = n;
+                }
+            }
+            "PreviewTime" => {
+                if let Ok(n) = value.parse() {
+                    self.preview_time = n;
+                }
+            }
+            "Countdown" => {
+                if let Ok(n) = value.parse() {
+                    self.countdown = n;
+                }
+            }
+            "SampleSet" => {
+                self.sample_set = SampleSet::from(value);
+            }
+            "StackLeniency" => {
+                if let Ok(n) = value.parse() {
+                    self.stack_leniency = n;
+                }
+            }
+            "Mode" => {
+                if let Ok(n) = value.parse() {
+                    self.mode = n;
+                }
+            }
+            "LetterboxInBreaks" => {
+                self.letterbox_in_breaks = value != "0";
+            }
+            "UseSkinSprites" => {
+                self.use_skin_sprites = value != "0";
+            }
+            "OverlayPosition" => {
+                self.overlay_position = OverlayPosition::from(value);
+            }
+            "SkinPreference" => {
+                self.skin_preference = value.to_string();
+            }
+            "EpilepsyWarning" => {
+                self.epilepsy_warning = value != "0";
+            }
+            "CountdownOffset" => {
+                if let Ok(n) = value.parse() {
+                    self.countdown_offset = n;
+                }
+            }
+            "SpecialStyle" => {
+                self.special_style = value != "0";
+            }
+            "WidescreenStoryboard" => {
+                self.widescreen_storyboard = value != "0";
+            }
+            "SamplesMatchPlaybackRate" => {
+                self.samples_match_playback_rate = value != "0";
+            }
+            _ => {}
+        }
     }
 }

@@ -1467,21 +1467,26 @@ impl Events {
 
 impl Beatmap {
     pub fn get_background_path(&self) -> String {
-        let mut path = PathBuf::from(self.get_directory());
-        path.push(self.events.get_background());
-
-        OsString::from(path.to_str().unwrap())
-            .to_str()
-            .unwrap()
-            .to_string()
+        OsString::from(
+            PathBuf::from(self.get_directory())
+                .join(self.events.get_background())
+                .to_str()
+                .unwrap(),
+        )
+        .to_str()
+        .unwrap()
+        .to_string()
     }
 
     pub fn get_video_path(&self) -> String {
-        let mut path = PathBuf::from(self.get_directory());
-        path.push(self.events.get_video());
-        OsString::from(path.to_str().unwrap())
-            .to_str()
-            .unwrap()
-            .to_string()
+        OsString::from(
+            PathBuf::from(self.get_directory())
+                .join(self.events.get_video())
+                .to_str()
+                .unwrap(),
+        )
+        .to_str()
+        .unwrap()
+        .to_string()
     }
 }

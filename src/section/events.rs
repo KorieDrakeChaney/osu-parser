@@ -636,6 +636,10 @@ impl std::fmt::Display for MoveCommand {
 
 impl MoveCommand {
     pub fn parse(s: &[&str]) -> std::io::Result<Self> {
+        let mut start_x: f32 = 0.0;
+        let mut start_y: f32 = 0.0;
+        let mut end_time = 0;
+
         let easing = match s[0].parse() {
             Ok(x) => x,
             Err(_) => {
@@ -656,69 +660,73 @@ impl MoveCommand {
             }
         };
 
-        let end_time = if s.len() == 6 {
-            start_time
-        } else {
-            match s[2].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[2]),
-                    ))
-                }
-            }
-        };
+        let end_index = s.len() - 1;
 
-        let param_index = if s.len() == 6 { 5 } else { 6 };
-
-        let end_y = match s[param_index].parse() {
+        let end_x = match s[end_index - 1].parse() {
             Ok(x) => x,
             Err(_) => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidInput,
-                    format!("Invalid Command token: {}", s[param_index]),
+                    format!("Invalid Command token: {}", s[end_index - 2]),
                 ))
             }
         };
 
-        let start_y = if s[param_index - 1].is_empty() {
-            end_y
-        } else {
-            match s[5].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[param_index - 1]),
-                    ))
-                }
-            }
-        };
-
-        let end_x = match s[param_index - 2].parse() {
+        let end_y = match s[end_index].parse() {
             Ok(x) => x,
             Err(_) => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidInput,
-                    format!("Invalid Command token: {}", s[param_index - 2]),
+                    format!("Invalid Command token: {}", s[end_index]),
                 ))
             }
         };
 
-        let start_x = if s[param_index - 3].is_empty() {
-            end_x
-        } else {
-            match s[3].parse() {
+        if s[end_index - 2].is_empty() && end_index - 3 == 1 {
+            start_x = end_x;
+            start_y = end_y;
+            end_time = start_time;
+        } else if s[end_index - 2].is_empty() {
+            start_y = end_y;
+            end_time = start_time;
+            start_x = match s[end_index - 3].parse() {
                 Ok(x) => x,
                 Err(_) => {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[param_index - 4]),
+                        format!("Invalid Command token: {}", s[end_index - 4]),
                     ))
                 }
             }
-        };
+        } else {
+            end_time = match s[2].parse() {
+                Ok(x) => x,
+                Err(_) => {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        format!("Invalid Command token: {}", s[end_index - 1]),
+                    ))
+                }
+            };
+            start_y = match s[end_index - 2].parse() {
+                Ok(x) => x,
+                Err(_) => {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        format!("Invalid Command token: {}", s[end_index - 2]),
+                    ))
+                }
+            };
+            start_x = match s[end_index - 3].parse() {
+                Ok(x) => x,
+                Err(_) => {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        format!("Invalid Command token: {}", s[end_index - 3]),
+                    ))
+                }
+            };
+        }
 
         Ok(MoveCommand {
             easing,

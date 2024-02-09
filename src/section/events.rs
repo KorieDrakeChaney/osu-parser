@@ -17,46 +17,6 @@ impl OsuBackground {
             y_offset,
         }
     }
-
-    pub fn parse(s: &str) -> std::io::Result<Self> {
-        let mut parts = s.split(",");
-
-        let filename = match parts.next() {
-            Some(x) => x,
-            None => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    "Invalid Background token",
-                ))
-            }
-        };
-
-        let x_offset = match parts.next() {
-            Some(x) => x.parse().unwrap(),
-            None => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    "Invalid Background token",
-                ))
-            }
-        };
-
-        let y_offset = match parts.next() {
-            Some(x) => x.parse().unwrap(),
-            None => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    "Invalid Background token",
-                ))
-            }
-        };
-
-        Ok(OsuBackground {
-            filename: OsString::from(filename),
-            x_offset,
-            y_offset,
-        })
-    }
 }
 
 #[derive(Debug)]
@@ -75,57 +35,6 @@ impl OsuVideo {
             x_offset,
             y_offset,
         }
-    }
-
-    pub fn parse(s: &str) -> std::io::Result<Self> {
-        let mut parts = s.split(",");
-
-        let start_time = match parts.next() {
-            Some(x) => x.parse().unwrap(),
-            None => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    "Invalid Video token",
-                ))
-            }
-        };
-
-        let filename = match parts.next() {
-            Some(x) => x,
-            None => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    "Invalid Video token",
-                ))
-            }
-        };
-
-        let x_offset = match parts.next() {
-            Some(x) => x.parse().unwrap(),
-            None => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    "Invalid Video token",
-                ))
-            }
-        };
-
-        let y_offset = match parts.next() {
-            Some(x) => x.parse().unwrap(),
-            None => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    "Invalid Video token",
-                ))
-            }
-        };
-
-        Ok(OsuVideo {
-            start_time,
-            filename: OsString::from(filename),
-            x_offset,
-            y_offset,
-        })
     }
 }
 

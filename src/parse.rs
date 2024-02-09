@@ -118,7 +118,7 @@ impl Beatmap {
                                                 commands.push(command);
                                                 index += 1;
                                             }
-                                            Err(e) => {
+                                            Err(_) => {
                                                 index -= 1;
                                                 break;
                                             }

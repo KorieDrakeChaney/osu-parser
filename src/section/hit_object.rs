@@ -412,6 +412,7 @@ pub struct HoldHitObject {
 impl HoldHitObject {
     pub fn parse(s: &[&str], x: i32, y: i32, time: i32, object_type: i32) -> std::io::Result<Self> {
         let mut hit_sample = None;
+        let mut end_time = 0;
 
         let hit_sound = if let Ok(n) = s[4].parse() {
             n
@@ -422,18 +423,11 @@ impl HoldHitObject {
             ));
         };
 
-        let end_time = if let Ok(n) = s[5].parse() {
-            n
-        } else {
-            return Err(std::io::Error::new(
-                std::io::ErrorKind::InvalidInput,
-                "Invalid HoldHitObject token",
-            ));
-        };
-
-        if s.len() > 6 {
-            if s[6].contains(":") {
-                hit_sample = Some(HitSample::parse(s[6])?);
+        if s.len() > 5 {
+            if s[5].contains(":") {
+                let mut split = s[5].splitn(2, ':');
+                end_time = split.next().unwrap().parse().unwrap();
+                hit_sample = Some(HitSample::parse(split.next().unwrap())?);
             }
         }
 
@@ -457,7 +451,7 @@ impl std::fmt::Display for HoldHitObject {
         );
 
         match &self.hit_sample {
-            Some(h) => display_string += &format!(",{}", h.to_string()),
+            Some(h) => display_string += &format!(":{}", h.to_string()),
             None => {}
         }
 

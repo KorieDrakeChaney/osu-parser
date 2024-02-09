@@ -142,6 +142,7 @@ impl From<&Vec<GeneralToken>> for General {
                 GeneralToken::SpecialStyle(b) => special_style = *b,
                 GeneralToken::WidescreenStoryboard(b) => widescreen_storyboard = *b,
                 GeneralToken::SamplesMatchSpeed(b) => samples_match_speed = *b,
+                _ => {}
             }
         }
 

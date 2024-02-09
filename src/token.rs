@@ -17,7 +17,7 @@ pub enum GeneralToken {
     CountdownOffset(i32),
     SpecialStyle(bool),
     WidescreenStoryboard(bool),
-    SamplesMatchSpeed(bool),
+    SamplesMatchPlaybackRate(bool),
 
     AudioHash(String),
     StoryFireInFront(bool),
@@ -42,7 +42,7 @@ impl GeneralToken {
             "CountdownOffset" => Ok(GeneralToken::CountdownOffset(s[1].parse().unwrap())),
             "SpecialStyle" => Ok(GeneralToken::SpecialStyle(s[1] == "1")),
             "WidescreenStoryboard" => Ok(GeneralToken::WidescreenStoryboard(s[1] == "1")),
-            "SamplesMatchSpeed" => Ok(GeneralToken::SamplesMatchSpeed(s[1] == "1")),
+            "SamplesMatchPlaybackRate" => Ok(GeneralToken::SamplesMatchPlaybackRate(s[1] == "1")),
             "AudioHash" => Ok(GeneralToken::AudioHash(s[1].to_string())),
             "StoryFireInFront" => Ok(GeneralToken::StoryFireInFront(s[1] == "1")),
             "AlwaysShowPlayfield" => Ok(GeneralToken::AlwaysShowPlayfield(s[1] == "1")),

@@ -100,7 +100,7 @@ pub struct General {
     /// Where or not the storyboard allows widescreen viewing
     pub widescreen_storyboard: bool,
     /// Where or not sound samples will change rate when playing with speed-changing mods
-    pub samples_match_speed: bool,
+    pub samples_match_playback_rate: bool,
 }
 
 impl From<&Vec<GeneralToken>> for General {
@@ -120,7 +120,7 @@ impl From<&Vec<GeneralToken>> for General {
         let mut countdown_offset = 0;
         let mut special_style = false;
         let mut widescreen_storyboard = false;
-        let mut samples_match_speed = false;
+        let mut samples_match_playback_rate = false;
 
         for token in tokens {
             match token {
@@ -141,7 +141,7 @@ impl From<&Vec<GeneralToken>> for General {
                 GeneralToken::CountdownOffset(i) => countdown_offset = *i,
                 GeneralToken::SpecialStyle(b) => special_style = *b,
                 GeneralToken::WidescreenStoryboard(b) => widescreen_storyboard = *b,
-                GeneralToken::SamplesMatchSpeed(b) => samples_match_speed = *b,
+                GeneralToken::SamplesMatchPlaybackRate(b) => samples_match_playback_rate = *b,
                 _ => {}
             }
         }
@@ -162,7 +162,7 @@ impl From<&Vec<GeneralToken>> for General {
             countdown_offset,
             special_style,
             widescreen_storyboard,
-            samples_match_speed,
+            samples_match_playback_rate,
         }
     }
 }
@@ -189,6 +189,10 @@ impl std::fmt::Display for General {
             "WidescreenStoryboard: {}\n",
             self.widescreen_storyboard as u8
         )?;
-        write!(f, "SamplesMatchSpeed: {}\n", self.samples_match_speed as u8)
+        write!(
+            f,
+            "SamplesMatchSpeed: {}\n",
+            self.samples_match_playback_rate as u8
+        )
     }
 }

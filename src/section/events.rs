@@ -1482,9 +1482,17 @@ impl Events {
             "0" => {
                 if parts[1] == "0" {
                     let file_name = OsString::from(parts[2]);
-                    let x_offset = parts[3].parse().unwrap();
-                    let y_offset = parts[4].parse().unwrap();
 
+                    let x_offset = if parts.len() > 3 {
+                        parts[3].parse().unwrap()
+                    } else {
+                        0_i32
+                    };
+                    let y_offset = if parts.len() > 4 {
+                        parts[4].parse().unwrap()
+                    } else {
+                        0_i32
+                    };
                     self.background = Some(OsuBackground::new(file_name, x_offset, y_offset));
                 }
             }

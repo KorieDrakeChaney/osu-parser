@@ -102,4 +102,28 @@ impl Beatmap {
     pub fn change_slider_tick_rate(&mut self, rate: f32) {
         self.difficulty.change_slider_tick_rate(rate);
     }
+
+    pub fn get_hp_drain_rate(&self) -> f32 {
+        self.difficulty.hp_drain_rate
+    }
+
+    pub fn get_circle_size(&self) -> f32 {
+        self.difficulty.circle_size
+    }
+
+    pub fn get_overall_difficulty(&self) -> f32 {
+        self.difficulty.overall_difficulty
+    }
+
+    pub fn get_approach_rate(&self) -> f32 {
+        self.difficulty.approach_rate
+    }
+
+    pub fn get_slider_multiplier(&self) -> f32 {
+        self.difficulty.slider_multiplier
+    }
+
+    pub fn get_slider_tick_rate(&self) -> f32 {
+        self.difficulty.slider_tick_rate
+    }
 }

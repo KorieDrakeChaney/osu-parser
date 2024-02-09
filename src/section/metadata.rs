@@ -154,4 +154,44 @@ impl Beatmap {
     pub fn change_metadata_beatmap_set_id(&mut self, id: i32) {
         self.metadata.change_beatmap_set_id(id);
     }
+
+    pub fn get_metadata_title(&self) -> &str {
+        &self.metadata.title
+    }
+
+    pub fn get_metadata_unicode_title(&self) -> &str {
+        &self.metadata.title_unicode
+    }
+
+    pub fn get_metadata_artist(&self) -> &str {
+        &self.metadata.artist
+    }
+
+    pub fn get_metadata_unicode_artist(&self) -> &str {
+        &self.metadata.artist_unicode
+    }
+
+    pub fn get_metadata_creator(&self) -> &str {
+        &self.metadata.creator
+    }
+
+    pub fn get_metadata_version(&self) -> &str {
+        &self.metadata.version
+    }
+
+    pub fn get_metadata_source(&self) -> &str {
+        &self.metadata.source
+    }
+
+    pub fn get_metadata_tags(&self) -> &str {
+        &self.metadata.tags
+    }
+
+    pub fn get_metadata_beatmap_id(&self) -> i32 {
+        self.metadata.beatmap_id
+    }
+
+    pub fn get_metadata_beatmap_set_id(&self) -> i32 {
+        self.metadata.beatmap_set_id
+    }
 }

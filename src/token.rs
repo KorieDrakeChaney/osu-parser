@@ -73,7 +73,7 @@ impl EditorToken {
             "TimelineZoom" => Ok(EditorToken::TimelineZoom(s[1].parse().unwrap())),
             _ => Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
-                "Invalid Editor  token",
+                format!("Invalid Editor token: {}", s[0]),
             )),
         }
     }
@@ -108,7 +108,7 @@ impl MetadataToken {
             "BeatmapSetID" => Ok(MetadataToken::BeatmapSetID(s[1].parse().unwrap())),
             _ => Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
-                "Invalid Metadata  token",
+                format!("Invalid Metadata token: {}", s[0]),
             )),
         }
     }
@@ -135,7 +135,7 @@ impl DifficultyToken {
             "SliderTickRate" => Ok(DifficultyToken::SliderTickRate(s[1].parse().unwrap())),
             _ => Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
-                "Invalid Difficulty  token",
+                format!("Invalid Difficulty token: {}", s[0]),
             )),
         }
     }
@@ -226,7 +226,7 @@ impl Section {
             "[HitObjects]" => Ok(Section::HitObjects),
             _ => Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
-                "Invalid section",
+                format!("Invalid section : {}", s),
             )),
         }
     }

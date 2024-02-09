@@ -1,4 +1,7 @@
-use std::ffi::OsString;
+use std::{
+    ffi::{OsStr, OsString},
+    path::PathBuf,
+};
 
 use crate::Beatmap;
 
@@ -1445,29 +1448,40 @@ impl Events {
         self.storyboards.push(storyboard);
     }
 
-    pub fn get_background(&self) -> Option<OsString> {
+    pub fn get_background(&self) -> OsString {
         if let Some(background) = &self.background {
-            Some(background.filename.clone())
+            background.filename.clone()
         } else {
-            None
+            OsString::new()
         }
     }
 
-    pub fn get_video(&self) -> Option<OsString> {
+    pub fn get_video(&self) -> OsString {
         if let Some(video) = &self.video {
-            Some(video.filename.clone())
+            video.filename.clone()
         } else {
-            None
+            OsString::new()
         }
     }
 }
 
 impl Beatmap {
-    pub fn get_background(&self) -> Option<OsString> {
-        self.events.get_background()
+    pub fn get_background_path(&self) -> String {
+        let mut path = PathBuf::from(self.get_directory());
+        path.push(self.events.get_background());
+
+        OsString::from(path.to_str().unwrap())
+            .to_str()
+            .unwrap()
+            .to_string()
     }
 
-    pub fn get_video(&self) -> Option<OsString> {
-        self.events.get_video()
+    pub fn get_video_path(&self) -> String {
+        let mut path = PathBuf::from(self.get_directory());
+        path.push(self.events.get_video());
+        OsString::from(path.to_str().unwrap())
+            .to_str()
+            .unwrap()
+            .to_string()
     }
 }

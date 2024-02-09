@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 #[derive(Debug, PartialEq)]
 pub enum GeneralToken {
     AudioFilename(String),
@@ -46,7 +48,7 @@ impl GeneralToken {
             "AlwaysShowPlayfield" => Ok(GeneralToken::AlwaysShowPlayfield(s[1] == "1")),
             _ => Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
-                "Invalid General  token",
+                format!("Invalid General token: {}", s[0]),
             )),
         }
     }

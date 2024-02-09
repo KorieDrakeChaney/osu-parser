@@ -641,9 +641,9 @@ impl std::fmt::Display for MoveCommand {
 
 impl MoveCommand {
     pub fn parse(s: &[&str]) -> std::io::Result<Self> {
-        let mut start_x: f32 = 0.0;
-        let mut start_y: f32 = 0.0;
-        let mut end_time = 0;
+        let start_x;
+        let start_y;
+        let end_time;
 
         let easing = match s[0].parse() {
             Ok(x) => x,
@@ -1403,7 +1403,7 @@ impl Events {
         match parts[0] {
             "0" => {
                 if parts[1] == "0" {
-                    let file_name = OsString::from(parts[2]);
+                    let file_name = OsString::from(&parts[2][1..parts[2].len() - 1]);
 
                     let x_offset = if parts.len() > 3 {
                         parts[3].parse().unwrap()
@@ -1420,7 +1420,7 @@ impl Events {
             }
             "1" | "Video" => {
                 let start_time = parts[1].parse().unwrap();
-                let file_name = OsString::from(parts[2]);
+                let file_name = OsString::from(&parts[2][1..parts[2].len() - 1]);
                 let x_offset = if parts.len() > 3 {
                     parts[3].parse().unwrap()
                 } else {

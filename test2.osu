@@ -47,7 +47,7 @@ SliderMultiplier: 0.8
 SliderTickRate: 0.5
 
 [Events]
-0,0,""yr.jpg"",0,0
+0,0,"yr.jpg",0,0
 2,44976,48917
 2,134278,143801
 2,145441,154964

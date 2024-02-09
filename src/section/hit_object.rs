@@ -11,14 +11,26 @@ pub struct HitSample {
 
 impl HitSample {
     pub fn parse(s: &str) -> std::io::Result<Self> {
-        let mut iter = s.split(":");
+        let samples = s.split(":").collect::<Vec<&str>>();
         Ok(HitSample {
-            normal_set: iter.next().unwrap().parse().unwrap(),
-            addition_set: iter.next().unwrap().parse().unwrap(),
-            index: iter.next().unwrap().parse().unwrap(),
-            volume: iter.next().unwrap().parse().unwrap(),
-            filename: if let Some(filename) = iter.next() {
-                Some(OsString::from(filename))
+            normal_set: samples[0].parse().unwrap(),
+            addition_set: if samples.len() > 1 {
+                samples[1].parse().unwrap()
+            } else {
+                0
+            },
+            index: if samples.len() > 2 {
+                samples[2].parse().unwrap()
+            } else {
+                0
+            },
+            volume: if samples.len() > 3 {
+                samples[3].parse().unwrap()
+            } else {
+                0
+            },
+            filename: if samples.len() > 4 {
+                Some(OsString::from(samples[4]))
             } else {
                 None
             },
@@ -325,7 +337,7 @@ impl std::fmt::Display for SliderHitObject {
         }
 
         match &self.hit_sample {
-            Some(h) => display_string += &h.to_string(),
+            Some(h) => display_string += &format!(",{}", h.to_string()),
             None => {}
         }
 

@@ -1,4 +1,5 @@
 use crate::Beatmap;
+
 #[derive(Debug)]
 pub struct Difficulty {
     hp_drain_rate: f32,

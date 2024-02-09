@@ -75,3 +75,10 @@ impl std::fmt::Display for Beatmap {
         write!(f, "{}", display_string)
     }
 }
+
+impl PartialEq for Beatmap {
+    fn eq(&self, other: &Self) -> bool {
+        self.get_metadata_beatmap_id() == other.get_metadata_beatmap_id()
+            && self.get_metadata_version() == other.get_metadata_version()
+    }
+}

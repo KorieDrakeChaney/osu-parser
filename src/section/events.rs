@@ -1,5 +1,7 @@
 use std::ffi::OsString;
 
+use crate::Beatmap;
+
 use super::colour::Color;
 
 #[derive(Debug)]
@@ -1441,5 +1443,31 @@ impl Events {
 
     pub fn push_storyboard(&mut self, storyboard: Storyboard) {
         self.storyboards.push(storyboard);
+    }
+
+    pub fn get_background(&self) -> Option<OsString> {
+        if let Some(background) = &self.background {
+            Some(background.filename.clone())
+        } else {
+            None
+        }
+    }
+
+    pub fn get_video(&self) -> Option<OsString> {
+        if let Some(video) = &self.video {
+            Some(video.filename.clone())
+        } else {
+            None
+        }
+    }
+}
+
+impl Beatmap {
+    pub fn get_background(&self) -> Option<OsString> {
+        self.events.get_background()
+    }
+
+    pub fn get_video(&self) -> Option<OsString> {
+        self.events.get_video()
     }
 }

@@ -93,18 +93,17 @@ pub struct CircleHitObject {
 
 impl CircleHitObject {
     pub fn parse(s: &[&str], x: i32, y: i32, time: i32, object_type: i32) -> std::io::Result<Self> {
-        let mut hit_sound = 0;
         let mut params: Vec<String> = Vec::new();
         let mut hit_sample = None;
 
-        if let Ok(n) = s[4].parse() {
-            hit_sound = n;
+        let hit_sound = if let Ok(n) = s[4].parse() {
+            n
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid CircleHitObject token",
             ));
-        }
+        };
 
         if s.len() > 6 {
             for p in &s[5..s.len() - 1] {
@@ -218,23 +217,19 @@ pub struct SliderHitObject {
 
 impl SliderHitObject {
     pub fn parse(s: &[&str], x: i32, y: i32, time: i32, object_type: i32) -> std::io::Result<Self> {
-        let mut hit_sound = 0;
-        let mut curve_type = CurveType::Linear;
         let mut curve_points = Vec::new();
-        let mut slides = 0;
-        let mut length = 0.0;
         let mut edge_sounds = Vec::new();
         let mut edge_sets = Vec::new();
         let mut hit_sample = None;
 
-        if let Ok(n) = s[4].parse() {
-            hit_sound = n;
+        let hit_sound = if let Ok(n) = s[4].parse() {
+            n
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid SliderHitObject token",
             ));
-        }
+        };
 
         let mut iter = s[5].split("|");
         let curve_type = CurveType::from(iter.next().unwrap());
@@ -242,23 +237,23 @@ impl SliderHitObject {
             curve_points.push(CurvePoint::from(point));
         }
 
-        if let Ok(n) = s[6].parse() {
-            slides = n;
+        let slides = if let Ok(n) = s[6].parse() {
+            n
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid SliderHitObject token",
             ));
-        }
+        };
 
-        if let Ok(n) = s[7].parse() {
-            length = n;
+        let length = if let Ok(n) = s[7].parse() {
+            n
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid SliderHitObject token",
             ));
-        }
+        };
 
         if s.len() > 8 {
             let sounds = s[8].split("|");
@@ -350,27 +345,25 @@ pub struct SpinnerHitObject {
 
 impl SpinnerHitObject {
     pub fn parse(s: &[&str], x: i32, y: i32, time: i32, object_type: i32) -> std::io::Result<Self> {
-        let mut hit_sound = 0;
-        let mut end_time = 0;
         let mut hit_sample = None;
 
-        if let Ok(n) = s[4].parse() {
-            hit_sound = n;
+        let hit_sound = if let Ok(n) = s[4].parse() {
+            n
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid SpinnerHitObject token",
             ));
-        }
+        };
 
-        if let Ok(n) = s[5].parse() {
-            end_time = n;
+        let end_time = if let Ok(n) = s[5].parse() {
+            n
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid SpinnerHitObject token",
             ));
-        }
+        };
 
         if s.len() > 6 {
             if s[6].contains(":") {
@@ -418,27 +411,25 @@ pub struct HoldHitObject {
 
 impl HoldHitObject {
     pub fn parse(s: &[&str], x: i32, y: i32, time: i32, object_type: i32) -> std::io::Result<Self> {
-        let mut hit_sound = 0;
-        let mut end_time = 0;
         let mut hit_sample = None;
 
-        if let Ok(n) = s[4].parse() {
-            hit_sound = n;
+        let hit_sound = if let Ok(n) = s[4].parse() {
+            n
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid HoldHitObject token",
             ));
-        }
+        };
 
-        if let Ok(n) = s[5].parse() {
-            end_time = n;
+        let end_time = if let Ok(n) = s[5].parse() {
+            n
         } else {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid HoldHitObject token",
             ));
-        }
+        };
 
         if s.len() > 6 {
             if s[6].contains(":") {

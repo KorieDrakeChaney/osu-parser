@@ -39,6 +39,14 @@ impl Beatmap {
     pub fn save(&self, file: &str) {
         std::fs::write(file, self.to_string()).unwrap();
     }
+
+    pub fn get_hit_objects(&self) -> &Vec<HitObject> {
+        &self.hit_objects
+    }
+
+    pub fn get_timing_points(&self) -> &Vec<TimingPoint> {
+        &self.timing_points
+    }
 }
 
 impl std::fmt::Display for Beatmap {

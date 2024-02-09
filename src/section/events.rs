@@ -1403,8 +1403,7 @@ impl Events {
         match parts[0] {
             "0" => {
                 if parts[1] == "0" {
-                    let path = PathBuf::from(parts[2]);
-                    let file_name = OsString::from(path);
+                    let file_name = OsString::from(parts[2]);
 
                     let x_offset = if parts.len() > 3 {
                         parts[3].parse().unwrap()
@@ -1468,26 +1467,16 @@ impl Events {
 
 impl Beatmap {
     pub fn get_background_path(&self) -> String {
-        OsString::from(
-            PathBuf::from(self.get_directory())
-                .join(self.events.get_background())
-                .to_str()
-                .unwrap(),
-        )
-        .to_str()
-        .unwrap()
-        .to_string()
+        OsString::from(PathBuf::from(self.get_directory()).join(self.events.get_background()))
+            .to_str()
+            .unwrap()
+            .to_string()
     }
 
     pub fn get_video_path(&self) -> String {
-        OsString::from(
-            PathBuf::from(self.get_directory())
-                .join(self.events.get_video())
-                .to_str()
-                .unwrap(),
-        )
-        .to_str()
-        .unwrap()
-        .to_string()
+        OsString::from(PathBuf::from(self.get_directory()).join(self.events.get_video()))
+            .to_str()
+            .unwrap()
+            .to_string()
     }
 }

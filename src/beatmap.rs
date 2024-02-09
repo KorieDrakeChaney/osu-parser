@@ -1,8 +1,11 @@
+use std::ffi::OsString;
+
 use crate::section::{
     Colour, Difficulty, Editor, Events, General, HitObject, Metadata, TimingPoint,
 };
 #[derive(Debug)]
 pub struct Beatmap {
+    directory: OsString,
     pub(crate) general: General,
     pub(crate) difficulty: Difficulty,
     pub(crate) metadata: Metadata,
@@ -15,6 +18,7 @@ pub struct Beatmap {
 
 impl Beatmap {
     pub fn new(
+        directory: OsString,
         general: General,
         editor: Editor,
         metadata: Metadata,
@@ -25,6 +29,7 @@ impl Beatmap {
         hit_objects: Vec<HitObject>,
     ) -> Self {
         Beatmap {
+            directory,
             general,
             difficulty,
             metadata,
@@ -46,6 +51,10 @@ impl Beatmap {
 
     pub fn get_timing_points(&self) -> &Vec<TimingPoint> {
         &self.timing_points
+    }
+
+    pub fn get_directory(&self) -> &OsString {
+        &self.directory
     }
 }
 

@@ -1,4 +1,4 @@
-use std::io::Read;
+use std::{ffi::OsString, io::Read, path::PathBuf};
 
 use crate::{
     beatmap::Beatmap,
@@ -22,7 +22,7 @@ const SECTIONS: [&'static str; 8] = [
 ];
 
 impl Beatmap {
-    pub fn parse(osu_data: &str) -> std::io::Result<Beatmap> {
+    fn parse(osu_data: &str, directory: OsString) -> std::io::Result<Beatmap> {
         let sanitized = sanitize(osu_data);
 
         let mut timing_points: Vec<TimingPoint> = Vec::new();
@@ -164,6 +164,7 @@ impl Beatmap {
         }
 
         Ok(Beatmap::new(
+            directory,
             general,
             editor,
             metadata,
@@ -176,10 +177,13 @@ impl Beatmap {
     }
 
     pub fn parse_from_file(file: &str) -> std::io::Result<Beatmap> {
-        let mut file = std::fs::File::open(file)?;
+        let path = PathBuf::from(file);
+        let directory = OsString::from(path.parent().unwrap());
+        let mut file = std::fs::File::open(path)?;
+
         let mut contents = String::new();
         file.read_to_string(&mut contents)?;
-        Beatmap::parse(&contents)
+        Beatmap::parse(&contents, directory)
     }
 }
 

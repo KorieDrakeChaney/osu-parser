@@ -82,3 +82,5 @@ impl PartialEq for Beatmap {
             && self.get_metadata_version() == other.get_metadata_version()
     }
 }
+
+impl Eq for Beatmap {}

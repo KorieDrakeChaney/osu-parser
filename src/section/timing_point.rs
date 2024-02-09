@@ -17,10 +17,7 @@ impl TimingPoint {
                 if let Ok(n) = s[0].parse() {
                     n
                 } else {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        "Invalid TimingPoint token",
-                    ));
+                    0
                 }
             },
             beat_length: {
@@ -34,54 +31,80 @@ impl TimingPoint {
                 }
             },
             meter: {
-                if let Ok(n) = s[2].parse() {
-                    n
+                if s.len() > 2 {
+                    if let Ok(n) = s[2].parse() {
+                        n
+                    } else {
+                        return Err(std::io::Error::new(
+                            std::io::ErrorKind::InvalidInput,
+                            "Invalid TimingPoint token",
+                        ));
+                    }
                 } else {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        "Invalid TimingPoint token",
-                    ));
+                    0
                 }
             },
             sample_set: {
-                if let Ok(n) = s[3].parse() {
-                    n
+                if s.len() > 3 {
+                    if let Ok(n) = s[3].parse() {
+                        n
+                    } else {
+                        return Err(std::io::Error::new(
+                            std::io::ErrorKind::InvalidInput,
+                            "Invalid TimingPoint token",
+                        ));
+                    }
                 } else {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        "Invalid TimingPoint token",
-                    ));
+                    0
                 }
             },
             sample_index: {
-                if let Ok(n) = s[4].parse() {
-                    n
+                if s.len() > 4 {
+                    if let Ok(n) = s[4].parse() {
+                        n
+                    } else {
+                        return Err(std::io::Error::new(
+                            std::io::ErrorKind::InvalidInput,
+                            "Invalid TimingPoint token",
+                        ));
+                    }
                 } else {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        "Invalid TimingPoint token",
-                    ));
+                    0
                 }
             },
             volume: {
-                if let Ok(n) = s[5].parse() {
-                    n
+                if s.len() > 5 {
+                    if let Ok(n) = s[5].parse() {
+                        n
+                    } else {
+                        return Err(std::io::Error::new(
+                            std::io::ErrorKind::InvalidInput,
+                            "Invalid TimingPoint token",
+                        ));
+                    }
                 } else {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        "Invalid TimingPoint token",
-                    ));
+                    0
                 }
             },
-            uninherited: s[6] == "1",
-            effects: {
-                if let Ok(n) = s[7].parse() {
-                    n
+            uninherited: {
+                if s.len() > 6 {
+                    s[6] == "1"
                 } else {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        "Invalid TimingPoint token",
-                    ));
+                    false
+                }
+            },
+            effects: {
+                if s.len() > 7 {
+                    if let Ok(n) = s[7].parse() {
+                        n
+                    } else {
+                        return Err(std::io::Error::new(
+                            std::io::ErrorKind::InvalidInput,
+                            "Invalid TimingPoint token",
+                        ));
+                    }
+                } else {
+                    0
                 }
             },
         })

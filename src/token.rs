@@ -16,6 +16,10 @@ pub enum GeneralToken {
     SpecialStyle(bool),
     WidescreenStoryboard(bool),
     SamplesMatchSpeed(bool),
+
+    AudioHash(String),
+    StoryFireInFront(bool),
+    AlwaysShowPlayfield(bool),
 }
 
 impl GeneralToken {
@@ -37,6 +41,9 @@ impl GeneralToken {
             "SpecialStyle" => Ok(GeneralToken::SpecialStyle(s[1] == "1")),
             "WidescreenStoryboard" => Ok(GeneralToken::WidescreenStoryboard(s[1] == "1")),
             "SamplesMatchSpeed" => Ok(GeneralToken::SamplesMatchSpeed(s[1] == "1")),
+            "AudioHash" => Ok(GeneralToken::AudioHash(s[1].to_string())),
+            "StoryFireInFront" => Ok(GeneralToken::StoryFireInFront(s[1] == "1")),
+            "AlwaysShowPlayfield" => Ok(GeneralToken::AlwaysShowPlayfield(s[1] == "1")),
             _ => Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
                 "Invalid General  token",

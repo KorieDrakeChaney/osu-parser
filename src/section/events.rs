@@ -1328,8 +1328,8 @@ pub struct Storyboard {
     layer: StoryboardLayer,
     origin: Origin,
     image_path: OsString,
-    offset_x: i32,
-    offset_y: i32,
+    offset_x: f32,
+    offset_y: f32,
     commands: Vec<Command>,
 }
 
@@ -1338,8 +1338,8 @@ impl Storyboard {
         let parts = value.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
 
         let mut image_path = OsString::new();
-        let mut offset_x = 0;
-        let mut offset_y = 0;
+        let mut offset_x: f32 = 0.0;
+        let mut offset_y: f32 = 0.0;
 
         let storyboard_type = StoryboardType::from(parts[0]);
         let layer = StoryboardLayer::from(parts[1]);

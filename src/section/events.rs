@@ -1403,7 +1403,8 @@ impl Events {
         match parts[0] {
             "0" => {
                 if parts[1] == "0" {
-                    let file_name = OsString::from(parts[2]);
+                    let path = PathBuf::from(parts[2]);
+                    let file_name = OsString::from(path);
 
                     let x_offset = if parts.len() > 3 {
                         parts[3].parse().unwrap()

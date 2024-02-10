@@ -1,6 +1,6 @@
 use std::ffi::OsString;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum SampleSet {
     Normal,
     Soft,
@@ -33,7 +33,7 @@ impl From<&str> for SampleSet {
         }
     }
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum OverlayPosition {
     NoChange,
     Below,
@@ -127,31 +127,32 @@ impl Default for General {
 
 impl std::fmt::Display for General {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "[General]\n")?;
-        write!(f, "AudioFilename: {}\n", self.audio_file.to_str().unwrap())?;
-        write!(f, "AudioLeadIn: {}\n", self.audio_lead_in)?;
-        write!(f, "PreviewTime: {}\n", self.preview_time)?;
-        write!(f, "Countdown: {}\n", self.countdown)?;
-        write!(f, "SampleSet: {}\n", self.sample_set)?;
-        write!(f, "StackLeniency: {}\n", self.stack_leniency)?;
-        write!(f, "Mode: {}\n", self.mode)?;
-        write!(f, "LetterboxInBreaks: {}\n", self.letterbox_in_breaks as u8)?;
-        write!(f, "UseSkinSprites: {}\n", self.use_skin_sprites as u8)?;
-        write!(f, "OverlayPosition: {}\n", self.overlay_position)?;
-        write!(f, "SkinPreference: {}\n", self.skin_preference)?;
-        write!(f, "EpilepsyWarning: {}\n", self.epilepsy_warning as u8)?;
-        write!(f, "CountdownOffset: {}\n", self.countdown_offset)?;
-        write!(f, "SpecialStyle: {}\n", self.special_style as u8)?;
-        write!(
-            f,
+        let mut display_string = String::from("[General]\n");
+        if self.audio_file.to_str().is_some() {
+            display_string += &format!("AudioFilename: {}\n", self.audio_file.to_str().unwrap());
+        }
+        display_string += &format!("AudioLeadIn: {}\n", self.audio_lead_in);
+        display_string += &format!("PreviewTime: {}\n", self.preview_time);
+        display_string += &format!("Countdown: {}\n", self.countdown);
+        display_string += &format!("SampleSet: {}\n", self.sample_set);
+        display_string += &format!("StackLeniency: {}\n", self.stack_leniency);
+        display_string += &format!("Mode: {}\n", self.mode);
+        display_string += &format!("LetterboxInBreaks: {}\n", self.letterbox_in_breaks as u8);
+        display_string += &format!("UseSkinSprites: {}\n", self.use_skin_sprites as u8);
+        display_string += &format!("OverlayPosition: {}\n", self.overlay_position);
+        display_string += &format!("SkinPreference: {}\n", self.skin_preference);
+        display_string += &format!("EpilepsyWarning: {}\n", self.epilepsy_warning as u8);
+        display_string += &format!("CountdownOffset: {}\n", self.countdown_offset);
+        display_string += &format!("SpecialStyle: {}\n", self.special_style as u8);
+        display_string += &format!(
             "WidescreenStoryboard: {}\n",
             self.widescreen_storyboard as u8
-        )?;
-        write!(
-            f,
+        );
+        display_string += &format!(
             "SamplesMatchSpeed: {}\n",
             self.samples_match_playback_rate as u8
-        )
+        );
+        write!(f, "{}", display_string)
     }
 }
 

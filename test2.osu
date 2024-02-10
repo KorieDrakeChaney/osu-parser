@@ -1,20 +1,10 @@
 [General]
 AudioFilename: audio.mp3
-AudioLeadIn: 0
 PreviewTime: 178632
-Countdown: 0
 SampleSet: Soft
 StackLeniency: 0.6
-Mode: 0
-LetterboxInBreaks: 0
-UseSkinSprites: 0
-OverlayPosition: NoChange
-SkinPreference: 
 EpilepsyWarning: 1
-CountdownOffset: 0
-SpecialStyle: 0
 WidescreenStoryboard: 1
-SamplesMatchSpeed: 0
 
 
 [Editor]

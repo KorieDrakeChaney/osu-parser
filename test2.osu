@@ -6,7 +6,7 @@ Countdown: 0
 SampleSet: Soft
 StackLeniency: 0.6
 Mode: 0
-LetterboxInBreaks: false
+LetterboxInBreaks: 0
 UseSkinSprites: 0
 OverlayPosition: NoChange
 SkinPreference: 

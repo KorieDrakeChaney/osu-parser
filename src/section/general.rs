@@ -135,7 +135,7 @@ impl std::fmt::Display for General {
         write!(f, "SampleSet: {}\n", self.sample_set)?;
         write!(f, "StackLeniency: {}\n", self.stack_leniency)?;
         write!(f, "Mode: {}\n", self.mode)?;
-        write!(f, "LetterboxInBreaks: {}\n", self.letterbox_in_breaks)?;
+        write!(f, "LetterboxInBreaks: {}\n", self.letterbox_in_breaks as u8)?;
         write!(f, "UseSkinSprites: {}\n", self.use_skin_sprites as u8)?;
         write!(f, "OverlayPosition: {}\n", self.overlay_position)?;
         write!(f, "SkinPreference: {}\n", self.skin_preference)?;

@@ -41,27 +41,27 @@ impl std::fmt::Display for Difficulty {
         let mut display_string = String::from("[Difficulty]\n");
 
         if let Some(hp_drain_rate) = &self.hp_drain_rate {
-            display_string.push_str(&format!("HPDrainRate: {}\n", hp_drain_rate));
+            display_string.push_str(&format!("HPDrainRate:{}\n", hp_drain_rate));
         }
 
         if let Some(circle_size) = &self.circle_size {
-            display_string.push_str(&format!("CircleSize: {}\n", circle_size));
+            display_string.push_str(&format!("CircleSize:{}\n", circle_size));
         }
 
         if let Some(overall_difficulty) = &self.overall_difficulty {
-            display_string.push_str(&format!("OverallDifficulty: {}\n", overall_difficulty));
+            display_string.push_str(&format!("OverallDifficulty:{}\n", overall_difficulty));
         }
 
         if let Some(approach_rate) = &self.approach_rate {
-            display_string.push_str(&format!("ApproachRate: {}\n", approach_rate));
+            display_string.push_str(&format!("ApproachRate:{}\n", approach_rate));
         }
 
         if let Some(slider_multiplier) = &self.slider_multiplier {
-            display_string.push_str(&format!("SliderMultiplier: {}\n", slider_multiplier));
+            display_string.push_str(&format!("SliderMultiplier:{}\n", slider_multiplier));
         }
 
         if let Some(slider_tick_rate) = &self.slider_tick_rate {
-            display_string.push_str(&format!("SliderTickRate: {}\n", slider_tick_rate));
+            display_string.push_str(&format!("SliderTickRate:{}\n", slider_tick_rate));
         }
 
         write!(f, "{}", display_string)

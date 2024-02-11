@@ -59,34 +59,34 @@ impl std::fmt::Display for Metadata {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let mut display_string = String::from("[Metadata]\n");
         if let Some(title) = &self.title {
-            display_string.push_str(&format!("Title: {}\n", title));
+            display_string.push_str(&format!("Title:{}\n", title));
         }
         if let Some(title_unicode) = &self.title_unicode {
-            display_string.push_str(&format!("TitleUnicode: {}\n", title_unicode));
+            display_string.push_str(&format!("TitleUnicode:{}\n", title_unicode));
         }
         if let Some(artist) = &self.artist {
-            display_string.push_str(&format!("Artist: {}\n", artist));
+            display_string.push_str(&format!("Artist:{}\n", artist));
         }
         if let Some(artist_unicode) = &self.artist_unicode {
-            display_string.push_str(&format!("ArtistUnicode: {}\n", artist_unicode));
+            display_string.push_str(&format!("ArtistUnicode:{}\n", artist_unicode));
         }
         if let Some(creator) = &self.creator {
-            display_string.push_str(&format!("Creator: {}\n", creator));
+            display_string.push_str(&format!("Creator:{}\n", creator));
         }
         if let Some(version) = &self.version {
-            display_string.push_str(&format!("Version: {}\n", version));
+            display_string.push_str(&format!("Version:{}\n", version));
         }
         if let Some(source) = &self.source {
-            display_string.push_str(&format!("Source: {}\n", source));
+            display_string.push_str(&format!("Source:{}\n", source));
         }
         if let Some(tags) = &self.tags {
-            display_string.push_str(&format!("Tags: {}\n", tags));
+            display_string.push_str(&format!("Tags:{}\n", tags));
         }
         if let Some(beatmap_id) = &self.beatmap_id {
-            display_string.push_str(&format!("BeatmapID: {}\n", beatmap_id));
+            display_string.push_str(&format!("BeatmapID:{}\n", beatmap_id));
         }
         if let Some(beatmap_set_id) = &self.beatmap_set_id {
-            display_string.push_str(&format!("BeatmapSetID: {}\n", beatmap_set_id));
+            display_string.push_str(&format!("BeatmapSetID:{}\n", beatmap_set_id));
         }
         write!(f, "{}", display_string)
     }

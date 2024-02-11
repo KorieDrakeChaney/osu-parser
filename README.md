@@ -1,6 +1,6 @@
 # osu!parser
 
-This is a parser for osu!. IT allows you to read and manipulate osu files in a simple efficient way.
+This is a parser for osu!. It allows you to read and manipulate osu files in a simple efficient way.
 
 ## Features
 

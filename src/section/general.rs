@@ -1,3 +1,5 @@
+use crate::Beatmap;
+
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum SampleSet {
     Normal,
@@ -229,5 +231,319 @@ impl General {
             "AlwaysShowPlayfield" => self.always_show_playfield = Some(value != "0"),
             _ => {}
         }
+    }
+}
+
+impl General {
+    pub fn get_audio_file(&self) -> Option<String> {
+        self.audio_file.clone()
+    }
+
+    pub fn get_audio_lead_in(&self) -> Option<i32> {
+        self.audio_lead_in
+    }
+
+    pub fn get_preview_time(&self) -> Option<i32> {
+        self.preview_time
+    }
+
+    pub fn get_countdown(&self) -> Option<i32> {
+        self.countdown
+    }
+
+    pub fn get_sample_set(&self) -> Option<SampleSet> {
+        self.sample_set
+    }
+
+    pub fn get_stack_leniency(&self) -> Option<f32> {
+        self.stack_leniency
+    }
+
+    pub fn get_mode(&self) -> Option<i32> {
+        self.mode
+    }
+
+    pub fn get_letterbox_in_breaks(&self) -> Option<bool> {
+        self.letterbox_in_breaks
+    }
+
+    pub fn get_use_skin_sprites(&self) -> Option<bool> {
+        self.use_skin_sprites
+    }
+
+    pub fn get_overlay_position(&self) -> Option<OverlayPosition> {
+        self.overlay_position
+    }
+
+    pub fn get_skin_preference(&self) -> Option<String> {
+        self.skin_preference.clone()
+    }
+
+    pub fn get_epilepsy_warning(&self) -> Option<bool> {
+        self.epilepsy_warning
+    }
+
+    pub fn get_countdown_offset(&self) -> Option<i32> {
+        self.countdown_offset
+    }
+
+    pub fn get_special_style(&self) -> Option<bool> {
+        self.special_style
+    }
+
+    pub fn get_widescreen_storyboard(&self) -> Option<bool> {
+        self.widescreen_storyboard
+    }
+
+    pub fn get_samples_match_playback_rate(&self) -> Option<bool> {
+        self.samples_match_playback_rate
+    }
+
+    pub fn get_audio_hash(&self) -> Option<String> {
+        self.audio_hash.clone()
+    }
+
+    pub fn get_story_fire_in_front(&self) -> Option<bool> {
+        self.story_fire_in_front
+    }
+
+    pub fn get_always_show_playfield(&self) -> Option<bool> {
+        self.always_show_playfield
+    }
+
+    pub fn change_audio_file(&mut self, audio_file: &str) {
+        self.audio_file = Some(audio_file.to_string());
+    }
+
+    pub fn change_audio_lead_in(&mut self, audio_lead_in: i32) {
+        self.audio_lead_in = Some(audio_lead_in);
+    }
+
+    pub fn change_preview_time(&mut self, preview_time: i32) {
+        self.preview_time = Some(preview_time);
+    }
+
+    pub fn change_countdown(&mut self, countdown: i32) {
+        self.countdown = Some(countdown);
+    }
+
+    pub fn change_sample_set(&mut self, sample_set: SampleSet) {
+        self.sample_set = Some(sample_set);
+    }
+
+    pub fn change_stack_leniency(&mut self, stack_leniency: f32) {
+        self.stack_leniency = Some(stack_leniency);
+    }
+
+    pub fn change_mode(&mut self, mode: i32) {
+        self.mode = Some(mode);
+    }
+
+    pub fn change_letterbox_in_breaks(&mut self, letterbox_in_breaks: bool) {
+        self.letterbox_in_breaks = Some(letterbox_in_breaks);
+    }
+
+    pub fn change_use_skin_sprites(&mut self, use_skin_sprites: bool) {
+        self.use_skin_sprites = Some(use_skin_sprites);
+    }
+
+    pub fn change_overlay_position(&mut self, overlay_position: OverlayPosition) {
+        self.overlay_position = Some(overlay_position);
+    }
+
+    pub fn change_skin_preference(&mut self, skin_preference: &str) {
+        self.skin_preference = Some(skin_preference.to_string());
+    }
+
+    pub fn change_epilepsy_warning(&mut self, epilepsy_warning: bool) {
+        self.epilepsy_warning = Some(epilepsy_warning);
+    }
+
+    pub fn change_countdown_offset(&mut self, countdown_offset: i32) {
+        self.countdown_offset = Some(countdown_offset);
+    }
+
+    pub fn change_special_style(&mut self, special_style: bool) {
+        self.special_style = Some(special_style);
+    }
+
+    pub fn change_widescreen_storyboard(&mut self, widescreen_storyboard: bool) {
+        self.widescreen_storyboard = Some(widescreen_storyboard);
+    }
+
+    pub fn change_samples_match_playback_rate(&mut self, samples_match_playback_rate: bool) {
+        self.samples_match_playback_rate = Some(samples_match_playback_rate);
+    }
+
+    pub fn change_audio_hash(&mut self, audio_hash: &str) {
+        self.audio_hash = Some(audio_hash.to_string());
+    }
+
+    pub fn change_story_fire_in_front(&mut self, story_fire_in_front: bool) {
+        self.story_fire_in_front = Some(story_fire_in_front);
+    }
+
+    pub fn change_always_show_playfield(&mut self, always_show_playfield: bool) {
+        self.always_show_playfield = Some(always_show_playfield);
+    }
+}
+
+impl Beatmap {
+    pub fn get_general_audio_file(&self) -> Option<String> {
+        self.general.get_audio_file()
+    }
+
+    pub fn get_general_audio_lead_in(&self) -> Option<i32> {
+        self.general.get_audio_lead_in()
+    }
+
+    pub fn get_general_preview_time(&self) -> Option<i32> {
+        self.general.get_preview_time()
+    }
+
+    pub fn get_general_countdown(&self) -> Option<i32> {
+        self.general.get_countdown()
+    }
+
+    pub fn get_general_sample_set(&self) -> Option<SampleSet> {
+        self.general.get_sample_set()
+    }
+
+    pub fn get_general_stack_leniency(&self) -> Option<f32> {
+        self.general.get_stack_leniency()
+    }
+
+    pub fn get_general_mode(&self) -> Option<i32> {
+        self.general.get_mode()
+    }
+
+    pub fn get_general_letterbox_in_breaks(&self) -> Option<bool> {
+        self.general.get_letterbox_in_breaks()
+    }
+
+    pub fn get_general_use_skin_sprites(&self) -> Option<bool> {
+        self.general.get_use_skin_sprites()
+    }
+
+    pub fn get_general_overlay_position(&self) -> Option<OverlayPosition> {
+        self.general.get_overlay_position()
+    }
+
+    pub fn get_general_skin_preference(&self) -> Option<String> {
+        self.general.get_skin_preference()
+    }
+
+    pub fn get_general_epilepsy_warning(&self) -> Option<bool> {
+        self.general.get_epilepsy_warning()
+    }
+
+    pub fn get_general_countdown_offset(&self) -> Option<i32> {
+        self.general.get_countdown_offset()
+    }
+
+    pub fn get_general_special_style(&self) -> Option<bool> {
+        self.general.get_special_style()
+    }
+
+    pub fn get_general_widescreen_storyboard(&self) -> Option<bool> {
+        self.general.get_widescreen_storyboard()
+    }
+
+    pub fn get_general_samples_match_playback_rate(&self) -> Option<bool> {
+        self.general.get_samples_match_playback_rate()
+    }
+
+    pub fn get_general_audio_hash(&self) -> Option<String> {
+        self.general.get_audio_hash()
+    }
+
+    pub fn get_general_story_fire_in_front(&self) -> Option<bool> {
+        self.general.get_story_fire_in_front()
+    }
+
+    pub fn get_general_always_show_playfield(&self) -> Option<bool> {
+        self.general.get_always_show_playfield()
+    }
+
+    pub fn change_general_audio_file(&mut self, audio_file: &str) {
+        self.general.change_audio_file(audio_file);
+    }
+
+    pub fn change_general_audio_lead_in(&mut self, audio_lead_in: i32) {
+        self.general.change_audio_lead_in(audio_lead_in);
+    }
+
+    pub fn change_general_preview_time(&mut self, preview_time: i32) {
+        self.general.change_preview_time(preview_time);
+    }
+
+    pub fn change_general_countdown(&mut self, countdown: i32) {
+        self.general.change_countdown(countdown);
+    }
+
+    pub fn change_general_sample_set(&mut self, sample_set: SampleSet) {
+        self.general.change_sample_set(sample_set);
+    }
+
+    pub fn change_general_stack_leniency(&mut self, stack_leniency: f32) {
+        self.general.change_stack_leniency(stack_leniency);
+    }
+
+    pub fn change_general_mode(&mut self, mode: i32) {
+        self.general.change_mode(mode);
+    }
+
+    pub fn change_general_letterbox_in_breaks(&mut self, letterbox_in_breaks: bool) {
+        self.general.change_letterbox_in_breaks(letterbox_in_breaks);
+    }
+
+    pub fn change_general_use_skin_sprites(&mut self, use_skin_sprites: bool) {
+        self.general.change_use_skin_sprites(use_skin_sprites);
+    }
+
+    pub fn change_general_overlay_position(&mut self, overlay_position: OverlayPosition) {
+        self.general.change_overlay_position(overlay_position);
+    }
+
+    pub fn change_general_skin_preference(&mut self, skin_preference: &str) {
+        self.general.change_skin_preference(skin_preference);
+    }
+
+    pub fn change_general_epilepsy_warning(&mut self, epilepsy_warning: bool) {
+        self.general.change_epilepsy_warning(epilepsy_warning);
+    }
+
+    pub fn change_general_countdown_offset(&mut self, countdown_offset: i32) {
+        self.general.change_countdown_offset(countdown_offset);
+    }
+
+    pub fn change_general_special_style(&mut self, special_style: bool) {
+        self.general.change_special_style(special_style);
+    }
+
+    pub fn change_general_widescreen_storyboard(&mut self, widescreen_storyboard: bool) {
+        self.general
+            .change_widescreen_storyboard(widescreen_storyboard);
+    }
+
+    pub fn change_general_samples_match_playback_rate(
+        &mut self,
+        samples_match_playback_rate: bool,
+    ) {
+        self.general
+            .change_samples_match_playback_rate(samples_match_playback_rate);
+    }
+
+    pub fn change_general_audio_hash(&mut self, audio_hash: &str) {
+        self.general.change_audio_hash(audio_hash);
+    }
+
+    pub fn change_general_story_fire_in_front(&mut self, story_fire_in_front: bool) {
+        self.general.change_story_fire_in_front(story_fire_in_front);
+    }
+
+    pub fn change_general_always_show_playfield(&mut self, always_show_playfield: bool) {
+        self.general
+            .change_always_show_playfield(always_show_playfield);
     }
 }

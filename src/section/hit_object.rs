@@ -148,13 +148,24 @@ impl std::fmt::Display for CircleHitObject {
             self.x, self.y, self.time, self.object_type, self.hit_sound
         );
 
-        for p in &self.params {
-            display_string += &format!("{},", p);
+        for (index, param) in self.params.iter().enumerate() {
+            if index == 0 {
+                display_string.push(',');
+            }
+            display_string += param;
+
+            if index != self.params.len() - 1 {
+                display_string.push(',');
+            }
         }
 
         match &self.hit_sample {
             Some(h) => display_string += &format!(",{}", h.to_string()),
             None => {}
+        }
+
+        if self.hit_sample.is_none() && self.params.is_empty() {
+            display_string.push(',');
         }
 
         write!(f, "{}", display_string)

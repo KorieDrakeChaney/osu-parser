@@ -1,4 +1,4 @@
-use std::{ffi::OsString, io::Read, path::PathBuf};
+use std::{ffi::OsString, io::Read, path::Path};
 
 use crate::{
     beatmap::Beatmap,
@@ -22,8 +22,10 @@ const SECTIONS: [&'static str; 8] = [
 ];
 
 impl Beatmap {
-    fn parse(osu_data: &str, directory: OsString) -> std::io::Result<Beatmap> {
+    fn parse(osu_data: &str, directory: OsString, file: &str) -> std::io::Result<Beatmap> {
         let sanitized = sanitize(osu_data);
+
+        let mut version = 14;
 
         let mut timing_points: Vec<TimingPoint> = Vec::new();
         let mut colours: Vec<Colour> = Vec::new();
@@ -43,6 +45,13 @@ impl Beatmap {
         let mut index = 0;
 
         'outer_loop: while let Some(line) = lines.get(index) {
+            if index == 0 {
+                if line.contains("osu file format v") {
+                    version = line.split('v').collect::<Vec<&str>>()[1]
+                        .parse::<u8>()
+                        .unwrap();
+                }
+            }
             if let Ok(section) = Section::parse(line) {
                 match section {
                     Section::General
@@ -164,7 +173,9 @@ impl Beatmap {
         }
 
         Ok(Beatmap::new(
+            file.to_string(),
             directory,
+            version,
             general,
             editor,
             metadata,
@@ -177,13 +188,14 @@ impl Beatmap {
     }
 
     pub fn parse_file(file: &str) -> std::io::Result<Beatmap> {
-        let path = PathBuf::from(file);
+        let path = Path::new(file);
+        let file_name = path.file_name().unwrap().to_str().unwrap();
         let directory = OsString::from(path.parent().unwrap());
         let mut file = std::fs::File::open(path)?;
 
         let mut contents = String::new();
         file.read_to_string(&mut contents)?;
-        Beatmap::parse(&contents, directory)
+        Beatmap::parse(&contents, directory, file_name)
     }
 }
 
@@ -197,6 +209,6 @@ mod tests {
     fn test() {
         let mut beatmap: Beatmap = Beatmap::parse_file("test.osu").unwrap();
         beatmap.change_metadata_title("@KorieDrakeChaney was here");
-        beatmap.save("test2.osu");
+        beatmap.save_with_name("test2.osu");
     }
 }

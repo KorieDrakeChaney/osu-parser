@@ -4,11 +4,11 @@ use crate::section::{
     Colour, Difficulty, Editor, Events, General, HitObject, Metadata, TimingPoint,
 };
 
-const VERSION: &'static str = "v14";
-
 #[derive(Debug)]
 pub struct Beatmap {
+    file: String,
     directory: OsString,
+    version: u8,
     pub(crate) general: General,
     pub(crate) difficulty: Difficulty,
     pub(crate) metadata: Metadata,
@@ -21,7 +21,9 @@ pub struct Beatmap {
 
 impl Beatmap {
     pub fn new(
+        file: String,
         directory: OsString,
+        version: u8,
         general: General,
         editor: Editor,
         metadata: Metadata,
@@ -32,7 +34,9 @@ impl Beatmap {
         hit_objects: Vec<HitObject>,
     ) -> Self {
         Beatmap {
+            file,
             directory,
+            version,
             general,
             difficulty,
             metadata,
@@ -44,14 +48,22 @@ impl Beatmap {
         }
     }
 
-    pub fn save(&self, name: &str) {
+    pub fn save_with_name(&self, name: &str) {
         std::fs::write(name, self.to_string()).unwrap();
     }
 
-    pub fn save_to_directory(&self, name: &str) -> std::io::Result<()> {
+    pub fn save_to_directory_with_name(&self, name: &str) -> std::io::Result<()> {
         std::fs::write(PathBuf::from(&self.directory).join(name), self.to_string())?;
 
         Ok(())
+    }
+
+    pub fn save(&self) {
+        self.save_with_name(self.get_file());
+    }
+
+    pub fn save_to_directory(&self) -> std::io::Result<()> {
+        self.save_to_directory_with_name(self.get_file())
     }
 
     pub fn get_hit_objects(&self) -> &Vec<HitObject> {
@@ -65,13 +77,17 @@ impl Beatmap {
     pub fn get_directory(&self) -> &OsString {
         &self.directory
     }
+
+    pub fn get_file(&self) -> &str {
+        &self.file
+    }
 }
 
 impl std::fmt::Display for Beatmap {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let mut display_string = format!(
-            "osu file format {VERSION}\n\n{}\n\n{}\n\n{}\n\n{}\n\n{}",
-            self.general, self.editor, self.metadata, self.difficulty, self.events,
+            "osu file format v{}\n\n{}\n\n{}\n\n{}\n\n{}\n\n{}",
+            self.version, self.general, self.editor, self.metadata, self.difficulty, self.events,
         );
 
         if self.colours.len() > 0 {

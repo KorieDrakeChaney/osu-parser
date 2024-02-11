@@ -98,6 +98,13 @@ pub struct General {
     pub widescreen_storyboard: Option<bool>,
     /// Where or not sound samples will change rate when playing with speed-changing mods
     pub samples_match_playback_rate: Option<bool>,
+
+    /// Deprecated
+    pub audio_hash: Option<String>,
+    /// Deprecated
+    pub story_fire_in_front: Option<bool>,
+    /// Deprecated
+    pub always_show_playfield: Option<bool>,
 }
 
 impl Default for General {
@@ -119,6 +126,10 @@ impl Default for General {
             special_style: None,
             widescreen_storyboard: None,
             samples_match_playback_rate: None,
+
+            audio_hash: None,
+            story_fire_in_front: None,
+            always_show_playfield: None,
         }
     }
 }
@@ -131,6 +142,9 @@ impl std::fmt::Display for General {
         }
         if let Some(audio_lead_in) = self.audio_lead_in {
             display_string += &format!("AudioLeadIn: {}\n", audio_lead_in);
+        }
+        if let Some(audio_hash) = &self.audio_hash {
+            display_string += &format!("AudioHash: {}\n", audio_hash);
         }
         if let Some(preview_time) = self.preview_time {
             display_string += &format!("PreviewTime: {}\n", preview_time);
@@ -148,10 +162,16 @@ impl std::fmt::Display for General {
             display_string += &format!("Mode: {}\n", mode);
         }
         if let Some(letterbox_in_breaks) = self.letterbox_in_breaks {
-            display_string += &format!("LetterboxInBreaks: {}\n", letterbox_in_breaks as i32);
+            display_string += &format!("LetterboxInBreaks: {}\n", letterbox_in_breaks as u8);
+        }
+        if let Some(story_fire_in_front) = self.story_fire_in_front {
+            display_string += &format!("StoryFireInFront: {}\n", story_fire_in_front as u8);
         }
         if let Some(use_skin_sprites) = self.use_skin_sprites {
-            display_string += &format!("UseSkinSprites: {}\n", use_skin_sprites as i32);
+            display_string += &format!("UseSkinSprites: {}\n", use_skin_sprites as u8);
+        }
+        if let Some(always_show_playfield) = self.always_show_playfield {
+            display_string += &format!("AlwaysShowPlayfield: {}\n", always_show_playfield as u8);
         }
         if let Some(overlay_position) = self.overlay_position {
             display_string += &format!("OverlayPosition: {}\n", overlay_position);
@@ -160,16 +180,16 @@ impl std::fmt::Display for General {
             display_string += &format!("SkinPreference: {}\n", skin_preference);
         }
         if let Some(epilepsy_warning) = self.epilepsy_warning {
-            display_string += &format!("EpilepsyWarning: {}\n", epilepsy_warning as i32);
+            display_string += &format!("EpilepsyWarning: {}\n", epilepsy_warning as u8);
         }
         if let Some(countdown_offset) = self.countdown_offset {
             display_string += &format!("CountdownOffset: {}\n", countdown_offset);
         }
         if let Some(special_style) = self.special_style {
-            display_string += &format!("SpecialStyle: {}\n", special_style as i32);
+            display_string += &format!("SpecialStyle: {}\n", special_style as u8);
         }
         if let Some(widescreen_storyboard) = self.widescreen_storyboard {
-            display_string += &format!("WidescreenStoryboard: {}\n", widescreen_storyboard as i32);
+            display_string += &format!("WidescreenStoryboard: {}\n", widescreen_storyboard as u8);
         }
         if let Some(samples_match_playback_rate) = self.samples_match_playback_rate {
             display_string += &format!(
@@ -203,6 +223,10 @@ impl General {
             "SpecialStyle" => self.special_style = Some(value != "0"),
             "WidescreenStoryboard" => self.widescreen_storyboard = Some(value != "0"),
             "SamplesMatchPlaybackRate" => self.samples_match_playback_rate = Some(value != "0"),
+
+            "AudioHash" => self.audio_hash = Some(value.to_string()),
+            "StoryFireInFront" => self.story_fire_in_front = Some(value != "0"),
+            "AlwaysShowPlayfield" => self.always_show_playfield = Some(value != "0"),
             _ => {}
         }
     }

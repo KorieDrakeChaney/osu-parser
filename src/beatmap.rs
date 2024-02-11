@@ -20,7 +20,7 @@ pub struct Beatmap {
 }
 
 impl Beatmap {
-    pub fn new(
+    pub(crate) fn new(
         file: String,
         directory: OsString,
         version: u8,

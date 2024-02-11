@@ -9,6 +9,7 @@ pub struct Beatmap {
     file_name: String,
     directory: OsString,
     version: u8,
+    no_spinners: bool,
     pub(crate) general: General,
     pub(crate) difficulty: Difficulty,
     pub(crate) metadata: Metadata,
@@ -37,6 +38,7 @@ impl Beatmap {
             file_name,
             directory,
             version,
+            no_spinners: false,
             general,
             difficulty,
             metadata,
@@ -81,6 +83,10 @@ impl Beatmap {
     pub fn get_file_name(&self) -> &str {
         &self.file_name
     }
+
+    pub fn toggle_spinners(&mut self) {
+        self.no_spinners = !self.no_spinners;
+    }
 }
 
 impl std::fmt::Display for Beatmap {
@@ -106,7 +112,17 @@ impl std::fmt::Display for Beatmap {
 
         if self.hit_objects.len() > 0 {
             display_string += "\n\n[HitObjects]\n";
+
             for hit_object in &self.hit_objects {
+                match hit_object {
+                    HitObject::Spinner(_) => {
+                        if self.no_spinners {
+                            continue;
+                        }
+                    }
+                    _ => {}
+                }
+
                 display_string += &format!("{}", hit_object);
             }
         }

@@ -4,7 +4,7 @@ use crate::{
     beatmap::Beatmap,
     sanitize::sanitize,
     section::{
-        Colour, Command, Difficulty, Editor, Events, General, HitObject, Metadata, Storyboard,
+        Colour, Command, Difficulty, Editor, Events, General, HitObject, Metadata, OsuStoryboard,
         TimingPoint,
     },
     token::Section,
@@ -22,7 +22,7 @@ const SECTIONS: [&'static str; 8] = [
 ];
 
 impl Beatmap {
-    fn parse(osu_data: &str, directory: OsString, file: &str) -> std::io::Result<Beatmap> {
+    fn parse(osu_data: &str, directory: OsString, file_name: &str) -> std::io::Result<Beatmap> {
         let sanitized = sanitize(osu_data);
 
         let mut version = 14;
@@ -113,36 +113,24 @@ impl Beatmap {
                             if SECTIONS.contains(&line.as_str()) {
                                 continue 'outer_loop;
                             } else {
-                                let split = line
-                                    .split(',')
-                                    .map(|split| split.trim())
-                                    .collect::<Vec<&str>>();
-
-                                if split[0] == "Sprite" || split[0] == "Animation" {
+                                if let Ok(mut storyboard) = OsuStoryboard::parse(line.as_str()) {
                                     index += 1;
-                                    let mut commands: Vec<Command> = Vec::new();
-                                    while let Some(line) = lines.get(index) {
-                                        match Command::parse(line.as_str()) {
-                                            Ok(command) => {
-                                                commands.push(command);
-                                                index += 1;
-                                            }
-                                            Err(_) => {
-                                                index -= 1;
-                                                break;
-                                            }
+
+                                    'command_loop: while let Some(potential_command) =
+                                        lines.get(index)
+                                    {
+                                        if let Ok(command) = Command::parse(&potential_command) {
+                                            storyboard.add_command(command);
+                                            index += 1;
+                                        } else {
+                                            break 'command_loop;
                                         }
                                     }
-
-                                    events.push_storyboard(Storyboard::parse(
-                                        line.as_str(),
-                                        commands,
-                                    )?);
+                                    events.push_storyboard(storyboard);
                                 } else {
                                     events.parse_value(line.as_str());
+                                    index += 1;
                                 }
-
-                                index += 1;
                             }
                         }
                     }
@@ -173,7 +161,7 @@ impl Beatmap {
         }
 
         Ok(Beatmap::new(
-            file.to_string(),
+            file_name.to_string(),
             directory,
             version,
             general,
@@ -207,8 +195,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut beatmap: Beatmap = Beatmap::parse_file("test.osu").unwrap();
+        let mut beatmap: Beatmap = Beatmap::parse_file("beatmap.osu").unwrap();
         beatmap.change_metadata_title("@KorieDrakeChaney was here");
-        beatmap.save_with_name("test2.osu");
+        beatmap.save_with_name("test_beatmap.osu");
     }
 }

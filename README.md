@@ -5,8 +5,11 @@ This is a parser for osu!. It allows you to read and manipulate osu files in a s
 ## Features
 
 - Read and write osu files.
+- Read and write osb files.
 
 ## Usage
+
+### Beatmap(osu file)
 
 ```rs
 use osu_parser::Beatmap;
@@ -22,10 +25,23 @@ fn main() {
 }
 ```
 
+### Storyboard(osb file)
+
+```rs
+use osu_parser::Storyboard;
+
+fn main() {
+    let storyboard = Storyboard::from_file("path/to/storyboard.osb").unwrap();
+    // Save the storyboard
+    storyboard.save();
+    // Prints the storyboard
+    println!("{}", storyboard);
+}
+```
+
 ## Upcoming Features
 
 - Add `.osk` file support
-- Add `.osb` file support
 - Add `.osr` file support
 
 `.osz` file support is supported in my other crate [osu_unzip](https://github.com/KorieDrakeChaney/osu-unzip)

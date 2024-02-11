@@ -4,7 +4,7 @@ mod storyboard;
 use std::{ffi::OsString, path::PathBuf};
 
 pub use command::Command;
-pub use storyboard::Storyboard;
+pub use storyboard::OsuStoryboard;
 
 use crate::Beatmap;
 
@@ -93,7 +93,7 @@ pub enum Event {
     Background(OsuBackground),
     Video(OsuVideo),
     Break(OsuBreak),
-    Storyboard(Storyboard),
+    Storyboard(OsuStoryboard),
     Basic(OsuEvent),
 }
 
@@ -269,7 +269,7 @@ impl Events {
         }
     }
 
-    pub fn push_storyboard(&mut self, storyboard: Storyboard) {
+    pub fn push_storyboard(&mut self, storyboard: OsuStoryboard) {
         self.events.push(Event::Storyboard(storyboard));
     }
 

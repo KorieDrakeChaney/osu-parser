@@ -3,10 +3,10 @@ pub struct VectorScaleCommand {
     easing: i32,
     start_time: i32,
     end_time: i32,
-    start_scale_x: f32,
-    start_scale_y: f32,
-    end_scale_x: f32,
-    end_scale_y: f32,
+    start_x: f32,
+    start_y: f32,
+    end_x: f32,
+    end_y: f32,
 }
 
 impl std::fmt::Display for VectorScaleCommand {
@@ -17,26 +17,22 @@ impl std::fmt::Display for VectorScaleCommand {
             self.easing,
             self.start_time,
             self.end_time,
-            self.start_scale_x,
-            self.end_scale_x,
-            self.start_scale_y,
-            self.end_scale_y
+            self.start_x,
+            self.start_y,
+            self.end_x,
+            self.end_y
         )
     }
 }
 
 impl VectorScaleCommand {
     pub fn parse(s: &[&str]) -> std::io::Result<Self> {
-        let start_scale_x;
-        let start_scale_y;
-        let end_time;
-
         let easing = match s[0].parse() {
             Ok(x) => x,
             Err(_) => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidInput,
-                    format!("Invalid VectorScale Command token: {}", s[0]),
+                    format!("Invalid Command token: {}", s[0]),
                 ))
             }
         };
@@ -46,87 +42,83 @@ impl VectorScaleCommand {
             Err(_) => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidInput,
-                    format!("Invalid VectorScale Command token: {}", s[1]),
+                    format!("Invalid Command token: {}", s[1]),
                 ))
             }
         };
 
-        let end_index = s.len() - 1;
+        let has_end_xy = s.len() == 7 || (s.len() == 5 && s[s.len() - 3].is_empty());
 
-        let end_scale_y = match s[end_index].parse() {
+        let end_y = match s[s.len() - 1].parse() {
             Ok(x) => x,
             Err(_) => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidInput,
-                    format!("Invalid VectorScale Command token: {}", s[end_index]),
+                    format!("Invalid Command token: {}", s[4]),
                 ))
             }
         };
 
-        let end_scale_x = match s[end_index - 1].parse() {
+        let end_x = match s[s.len() - 2].parse() {
             Ok(x) => x,
             Err(_) => {
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidInput,
-                    format!("Invalid VectorScale Command token: {}", s[end_index - 1]),
+                    format!("Invalid Command token: {}", s[3]),
                 ))
             }
         };
 
-        if s[end_index - 2].is_empty() && end_index - 3 == 1 {
-            start_scale_x = end_scale_x;
-            start_scale_y = end_scale_y;
-            end_time = start_time;
-        } else if s[end_index - 2].is_empty() {
-            start_scale_y = end_scale_y;
-            end_time = start_time;
-            start_scale_x = match s[end_index - 3].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[end_index - 4]),
-                    ))
-                }
-            }
+        let start_y = if s[s.len() - 3].is_empty() || !has_end_xy {
+            end_y
         } else {
-            end_time = match s[2].parse() {
+            match s[s.len() - 3].parse() {
+                Ok(y) => y,
+                Err(_) => {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        format!("Invalid Command token: {}", s[2]),
+                    ))
+                }
+            }
+        };
+
+        let start_x = if s[s.len() - 3].is_empty() || !has_end_xy {
+            end_x
+        } else {
+            match s[s.len() - 4].parse() {
                 Ok(x) => x,
                 Err(_) => {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[end_index - 1]),
+                        format!("Invalid Command token: {}", s[1]),
                     ))
                 }
-            };
-            start_scale_y = match s[end_index - 2].parse() {
+            }
+        };
+
+        let end_time = if s.len() == 5 && has_end_xy {
+            start_time
+        } else {
+            match s[2].parse() {
                 Ok(x) => x,
                 Err(_) => {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[end_index - 2]),
+                        format!("Invalid Command token: {}", s[2]),
                     ))
                 }
-            };
-            start_scale_x = match s[end_index - 3].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[end_index - 3]),
-                    ))
-                }
-            };
-        }
+            }
+        };
 
         Ok(VectorScaleCommand {
             easing,
             start_time,
             end_time,
-            start_scale_x,
-            end_scale_x,
-            start_scale_y,
-            end_scale_y,
+            start_x,
+            start_y,
+            end_x,
+            end_y,
         })
     }
 }

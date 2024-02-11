@@ -251,13 +251,13 @@ impl std::fmt::Display for SampleType {
 }
 
 #[derive(Debug)]
-pub struct Storyboard {
+pub struct OsuStoryboard {
     storyboard_type: StoryboardType,
     commands: Vec<Command>,
 }
 
-impl Storyboard {
-    pub fn parse(value: &str, commands: Vec<Command>) -> std::io::Result<Self> {
+impl OsuStoryboard {
+    pub fn parse(value: &str) -> std::io::Result<Self> {
         let parts = value.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
 
         let storyboard_type = match parts[0] {
@@ -442,14 +442,18 @@ impl Storyboard {
             }
         };
 
-        Ok(Storyboard {
+        Ok(OsuStoryboard {
             storyboard_type,
-            commands,
+            commands: Vec::new(),
         })
+    }
+
+    pub fn add_command(&mut self, command: Command) {
+        self.commands.push(command);
     }
 }
 
-impl std::fmt::Display for Storyboard {
+impl std::fmt::Display for OsuStoryboard {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let mut display_string = match &self.storyboard_type {
             StoryboardType::Sprite(sprite) => format!("{}\n", sprite),

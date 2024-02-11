@@ -6,7 +6,7 @@ use crate::section::{
 
 #[derive(Debug)]
 pub struct Beatmap {
-    file: String,
+    file_name: String,
     directory: OsString,
     version: u8,
     pub(crate) general: General,
@@ -21,7 +21,7 @@ pub struct Beatmap {
 
 impl Beatmap {
     pub(crate) fn new(
-        file: String,
+        file_name: String,
         directory: OsString,
         version: u8,
         general: General,
@@ -34,7 +34,7 @@ impl Beatmap {
         hit_objects: Vec<HitObject>,
     ) -> Self {
         Beatmap {
-            file,
+            file_name,
             directory,
             version,
             general,
@@ -59,11 +59,11 @@ impl Beatmap {
     }
 
     pub fn save(&self) {
-        self.save_with_name(self.get_file());
+        self.save_with_name(self.get_file_name());
     }
 
     pub fn save_to_directory(&self) -> std::io::Result<()> {
-        self.save_to_directory_with_name(self.get_file())
+        self.save_to_directory_with_name(self.get_file_name())
     }
 
     pub fn get_hit_objects(&self) -> &Vec<HitObject> {
@@ -78,8 +78,8 @@ impl Beatmap {
         &self.directory
     }
 
-    pub fn get_file(&self) -> &str {
-        &self.file
+    pub fn get_file_name(&self) -> &str {
+        &self.file_name
     }
 }
 

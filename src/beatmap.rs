@@ -1,8 +1,11 @@
-use std::ffi::OsString;
+use std::{ffi::OsString, path::PathBuf};
 
 use crate::section::{
     Colour, Difficulty, Editor, Events, General, HitObject, Metadata, TimingPoint,
 };
+
+const VERSION: &'static str = "v14";
+
 #[derive(Debug)]
 pub struct Beatmap {
     directory: OsString,
@@ -41,8 +44,14 @@ impl Beatmap {
         }
     }
 
-    pub fn save(&self, file: &str) {
-        std::fs::write(file, self.to_string()).unwrap();
+    pub fn save(&self, name: &str) {
+        std::fs::write(name, self.to_string()).unwrap();
+    }
+
+    pub fn save_to_directory(&self, name: &str) -> std::io::Result<()> {
+        std::fs::write(PathBuf::from(&self.directory).join(name), self.to_string())?;
+
+        Ok(())
     }
 
     pub fn get_hit_objects(&self) -> &Vec<HitObject> {
@@ -60,26 +69,31 @@ impl Beatmap {
 
 impl std::fmt::Display for Beatmap {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let display_string = format!(
-            "{}\n\n{}\n\n{}\n\n{}\n\n{}\n\n[TimingPoints]\n{}\n\n[Colours]\n{}\n\n[HitObjects]\n{}",
-            self.general,
-            self.editor,
-            self.metadata,
-            self.difficulty,
-            self.events,
-            self.timing_points
-                .iter()
-                .map(|timing_point| timing_point.to_string())
-                .collect::<String>(),
-            self.colours
-                .iter()
-                .map(|colour| colour.to_string())
-                .collect::<String>(),
-            self.hit_objects
-                .iter()
-                .map(|hit_object| hit_object.to_string())
-                .collect::<String>(),
+        let mut display_string = format!(
+            "osu file format {VERSION}\n\n{}\n\n{}\n\n{}\n\n{}\n\n{}",
+            self.general, self.editor, self.metadata, self.difficulty, self.events,
         );
+
+        if self.colours.len() > 0 {
+            display_string += "\n\n[Colours]\n";
+            for colour in &self.colours {
+                display_string += &format!("{}", colour);
+            }
+        }
+
+        if self.timing_points.len() > 0 {
+            display_string += "\n\n[TimingPoints]\n";
+            for timing_point in &self.timing_points {
+                display_string += &format!("{}", timing_point);
+            }
+        }
+
+        if self.hit_objects.len() > 0 {
+            display_string += "\n\n[HitObjects]\n";
+            for hit_object in &self.hit_objects {
+                display_string += &format!("{}", hit_object);
+            }
+        }
 
         write!(f, "{}", display_string)
     }

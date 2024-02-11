@@ -176,7 +176,7 @@ impl Beatmap {
         ))
     }
 
-    pub fn parse_from_file(file: &str) -> std::io::Result<Beatmap> {
+    pub fn parse_file(file: &str) -> std::io::Result<Beatmap> {
         let path = PathBuf::from(file);
         let directory = OsString::from(path.parent().unwrap());
         let mut file = std::fs::File::open(path)?;
@@ -195,7 +195,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut beatmap: Beatmap = Beatmap::parse_from_file("test.osu").unwrap();
+        let mut beatmap: Beatmap = Beatmap::parse_file("test.osu").unwrap();
         beatmap.change_metadata_title("@KorieDrakeChaney was here");
         beatmap.save("test2.osu");
     }

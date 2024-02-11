@@ -1,73 +1,94 @@
 use crate::Beatmap;
 #[derive(Debug)]
 pub struct Metadata {
-    title: String,
-    title_unicode: String,
-    artist: String,
-    artist_unicode: String,
-    creator: String,
-    version: String,
-    source: String,
-    tags: String,
-    beatmap_id: i32,
-    beatmap_set_id: i32,
+    title: Option<String>,
+    title_unicode: Option<String>,
+    artist: Option<String>,
+    artist_unicode: Option<String>,
+    creator: Option<String>,
+    version: Option<String>,
+    source: Option<String>,
+    tags: Option<String>,
+    beatmap_id: Option<i32>,
+    beatmap_set_id: Option<i32>,
 }
 
 impl Metadata {
     pub fn change_name(&mut self, name: &str) {
-        self.title = name.to_string();
+        self.title = Some(name.to_string());
     }
 
     pub fn change_unicode_name(&mut self, name: &str) {
-        self.title_unicode = name.to_string();
+        self.title_unicode = Some(name.to_string());
     }
 
     pub fn change_artist(&mut self, artist: &str) {
-        self.artist = artist.to_string();
+        self.artist = Some(artist.to_string());
     }
 
     pub fn change_unicode_artist(&mut self, artist: &str) {
-        self.artist_unicode = artist.to_string();
+        self.artist_unicode = Some(artist.to_string());
     }
 
     pub fn change_creator(&mut self, creator: &str) {
-        self.creator = creator.to_string();
+        self.creator = Some(creator.to_string());
     }
 
     pub fn change_version(&mut self, version: &str) {
-        self.version = version.to_string();
+        self.version = Some(version.to_string());
     }
 
     pub fn change_source(&mut self, source: &str) {
-        self.source = source.to_string();
+        self.source = Some(source.to_string());
     }
 
     pub fn change_tags(&mut self, tags: &str) {
-        self.tags = tags.to_string();
+        self.tags = Some(tags.to_string());
     }
 
     pub fn change_beatmap_id(&mut self, id: i32) {
-        self.beatmap_id = id;
+        self.beatmap_id = Some(id);
     }
 
     pub fn change_beatmap_set_id(&mut self, id: i32) {
-        self.beatmap_set_id = id;
+        self.beatmap_set_id = Some(id);
     }
 }
 
 impl std::fmt::Display for Metadata {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "[Metadata]\n")?;
-        write!(f, "Title: {}\n", self.title)?;
-        write!(f, "TitleUnicode: {}\n", self.title_unicode)?;
-        write!(f, "Artist: {}\n", self.artist)?;
-        write!(f, "ArtistUnicode: {}\n", self.artist_unicode)?;
-        write!(f, "Creator: {}\n", self.creator)?;
-        write!(f, "Version: {}\n", self.version)?;
-        write!(f, "Source: {}\n", self.source)?;
-        write!(f, "Tags: {}\n", self.tags)?;
-        write!(f, "BeatmapID: {}\n", self.beatmap_id)?;
-        write!(f, "BeatmapSetID: {}\n", self.beatmap_set_id)
+        let mut display_string = String::from("[Metadata]\n");
+        if let Some(title) = &self.title {
+            display_string.push_str(&format!("Title: {}\n", title));
+        }
+        if let Some(title_unicode) = &self.title_unicode {
+            display_string.push_str(&format!("TitleUnicode: {}\n", title_unicode));
+        }
+        if let Some(artist) = &self.artist {
+            display_string.push_str(&format!("Artist: {}\n", artist));
+        }
+        if let Some(artist_unicode) = &self.artist_unicode {
+            display_string.push_str(&format!("ArtistUnicode: {}\n", artist_unicode));
+        }
+        if let Some(creator) = &self.creator {
+            display_string.push_str(&format!("Creator: {}\n", creator));
+        }
+        if let Some(version) = &self.version {
+            display_string.push_str(&format!("Version: {}\n", version));
+        }
+        if let Some(source) = &self.source {
+            display_string.push_str(&format!("Source: {}\n", source));
+        }
+        if let Some(tags) = &self.tags {
+            display_string.push_str(&format!("Tags: {}\n", tags));
+        }
+        if let Some(beatmap_id) = &self.beatmap_id {
+            display_string.push_str(&format!("BeatmapID: {}\n", beatmap_id));
+        }
+        if let Some(beatmap_set_id) = &self.beatmap_set_id {
+            display_string.push_str(&format!("BeatmapSetID: {}\n", beatmap_set_id));
+        }
+        write!(f, "{}", display_string)
     }
 }
 
@@ -113,59 +134,89 @@ impl Beatmap {
     }
 
     pub fn get_metadata_title(&self) -> &str {
-        &self.metadata.title
+        match &self.metadata.title {
+            Some(title) => title,
+            None => "",
+        }
     }
 
     pub fn get_metadata_unicode_title(&self) -> &str {
-        &self.metadata.title_unicode
+        match &self.metadata.title_unicode {
+            Some(title) => title,
+            None => "",
+        }
     }
 
     pub fn get_metadata_artist(&self) -> &str {
-        &self.metadata.artist
+        match &self.metadata.artist {
+            Some(artist) => artist,
+            None => "",
+        }
     }
 
     pub fn get_metadata_unicode_artist(&self) -> &str {
-        &self.metadata.artist_unicode
+        match &self.metadata.artist_unicode {
+            Some(artist) => artist,
+            None => "",
+        }
     }
 
     pub fn get_metadata_creator(&self) -> &str {
-        &self.metadata.creator
+        match &self.metadata.creator {
+            Some(creator) => creator,
+            None => "",
+        }
     }
 
     pub fn get_metadata_version(&self) -> &str {
-        &self.metadata.version
+        match &self.metadata.version {
+            Some(version) => version,
+            None => "",
+        }
     }
 
     pub fn get_metadata_source(&self) -> &str {
-        &self.metadata.source
+        match &self.metadata.source {
+            Some(source) => source,
+            None => "",
+        }
     }
 
     pub fn get_metadata_tags(&self) -> &str {
-        &self.metadata.tags
+        match &self.metadata.tags {
+            Some(tags) => tags,
+            None => "",
+        }
     }
 
     pub fn get_metadata_beatmap_id(&self) -> i32 {
-        self.metadata.beatmap_id
+        match &self.metadata.beatmap_id {
+            Some(id) => *id,
+            None => 0,
+        }
     }
 
     pub fn get_metadata_beatmap_set_id(&self) -> i32 {
-        self.metadata.beatmap_set_id
+        match &self.metadata.beatmap_set_id {
+            Some(id) => *id,
+            None => 0,
+        }
     }
 }
 
 impl Default for Metadata {
     fn default() -> Self {
         Metadata {
-            title: String::new(),
-            title_unicode: String::new(),
-            artist: String::new(),
-            artist_unicode: String::new(),
-            creator: String::new(),
-            version: String::new(),
-            source: String::new(),
-            tags: String::new(),
-            beatmap_id: 0,
-            beatmap_set_id: 0,
+            title: None,
+            title_unicode: None,
+            artist: None,
+            artist_unicode: None,
+            creator: None,
+            version: None,
+            source: None,
+            tags: None,
+            beatmap_id: None,
+            beatmap_set_id: None,
         }
     }
 }
@@ -175,16 +226,16 @@ impl Metadata {
         let parts: Vec<&str> = value.split(':').map(|s| s.trim()).collect();
         let value = parts[1];
         match parts[0] {
-            "Title" => self.title = value.to_string(),
-            "TitleUnicode" => self.title_unicode = value.to_string(),
-            "Artist" => self.artist = value.to_string(),
-            "ArtistUnicode" => self.artist_unicode = value.to_string(),
-            "Creator" => self.creator = value.to_string(),
-            "Version" => self.version = value.to_string(),
-            "Source" => self.source = value.to_string(),
-            "Tags" => self.tags = value.to_string(),
-            "BeatmapID" => self.beatmap_id = value.parse().unwrap(),
-            "BeatmapSetID" => self.beatmap_set_id = value.parse().unwrap(),
+            "Title" => self.title = Some(value.to_string()),
+            "TitleUnicode" => self.title_unicode = Some(value.to_string()),
+            "Artist" => self.artist = Some(value.to_string()),
+            "ArtistUnicode" => self.artist_unicode = Some(value.to_string()),
+            "Creator" => self.creator = Some(value.to_string()),
+            "Version" => self.version = Some(value.to_string()),
+            "Source" => self.source = Some(value.to_string()),
+            "Tags" => self.tags = Some(value.to_string()),
+            "BeatmapID" => self.beatmap_id = Some(value.parse().unwrap()),
+            "BeatmapSetID" => self.beatmap_set_id = Some(value.parse().unwrap()),
             _ => {}
         }
     }

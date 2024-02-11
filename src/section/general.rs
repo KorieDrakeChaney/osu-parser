@@ -1,5 +1,3 @@
-use std::ffi::OsString;
-
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum SampleSet {
     Normal,
@@ -69,58 +67,58 @@ impl From<&str> for OverlayPosition {
 #[derive(Debug)]
 pub struct General {
     /// Location of the audio file
-    pub audio_file: OsString,
+    pub audio_file: Option<String>,
     /// Milliseconds of silence before the audio starts playing
-    pub audio_lead_in: i32,
+    pub audio_lead_in: Option<i32>,
     /// Time in milliseconds when the audio preview should start
-    pub preview_time: i32,
+    pub preview_time: Option<i32>,
     /// Speed of the coundown before the first hit object
-    pub countdown: i32,
+    pub countdown: Option<i32>,
     /// Sample set that will be used if timing points do not override it
-    pub sample_set: SampleSet,
+    pub sample_set: Option<SampleSet>,
     /// Multiplier for teh threshold in the time where hit objects placed close together stack
-    pub stack_leniency: f32,
+    pub stack_leniency: Option<f32>,
     /// Game mode
-    pub mode: i32,
+    pub mode: Option<i32>,
     /// Whether or not breaks have a letterboxing effect
-    pub letterbox_in_breaks: bool,
+    pub letterbox_in_breaks: Option<bool>,
     /// Whether or not the storyboard can use the user's skin images
-    pub use_skin_sprites: bool,
+    pub use_skin_sprites: Option<bool>,
     ///  Draw order of hit circle overlays compared to hit numbers
-    pub overlay_position: OverlayPosition,
+    pub overlay_position: Option<OverlayPosition>,
     /// Preferred skin to use during gameplay
-    pub skin_preference: String,
+    pub skin_preference: Option<String>,
     /// Epilepsy warning
-    pub epilepsy_warning: bool,
+    pub epilepsy_warning: Option<bool>,
     /// Time in beats that the countdown starts before the first hit object
-    pub countdown_offset: i32,
+    pub countdown_offset: Option<i32>,
     /// Where or not the "N+1" style key layout is used for osu!mania
-    pub special_style: bool,
+    pub special_style: Option<bool>,
     /// Where or not the storyboard allows widescreen viewing
-    pub widescreen_storyboard: bool,
+    pub widescreen_storyboard: Option<bool>,
     /// Where or not sound samples will change rate when playing with speed-changing mods
-    pub samples_match_playback_rate: bool,
+    pub samples_match_playback_rate: Option<bool>,
 }
 
 impl Default for General {
     fn default() -> Self {
         General {
-            audio_file: OsString::new(),
-            audio_lead_in: 0,
-            preview_time: 0,
-            countdown: 0,
-            sample_set: SampleSet::Normal,
-            stack_leniency: 0.7,
-            mode: 0,
-            letterbox_in_breaks: false,
-            use_skin_sprites: false,
-            overlay_position: OverlayPosition::NoChange,
-            skin_preference: String::new(),
-            epilepsy_warning: false,
-            countdown_offset: 0,
-            special_style: false,
-            widescreen_storyboard: false,
-            samples_match_playback_rate: false,
+            audio_file: None,
+            audio_lead_in: None,
+            preview_time: None,
+            countdown: None,
+            sample_set: None,
+            stack_leniency: None,
+            mode: None,
+            letterbox_in_breaks: None,
+            use_skin_sprites: None,
+            overlay_position: None,
+            skin_preference: None,
+            epilepsy_warning: None,
+            countdown_offset: None,
+            special_style: None,
+            widescreen_storyboard: None,
+            samples_match_playback_rate: None,
         }
     }
 }
@@ -128,30 +126,58 @@ impl Default for General {
 impl std::fmt::Display for General {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let mut display_string = String::from("[General]\n");
-        if self.audio_file.to_str().is_some() {
-            display_string += &format!("AudioFilename: {}\n", self.audio_file.to_str().unwrap());
+        if let Some(audio_file) = &self.audio_file {
+            display_string += &format!("AudioFilename: {}\n", audio_file);
         }
-        display_string += &format!("AudioLeadIn: {}\n", self.audio_lead_in);
-        display_string += &format!("PreviewTime: {}\n", self.preview_time);
-        display_string += &format!("Countdown: {}\n", self.countdown);
-        display_string += &format!("SampleSet: {}\n", self.sample_set);
-        display_string += &format!("StackLeniency: {}\n", self.stack_leniency);
-        display_string += &format!("Mode: {}\n", self.mode);
-        display_string += &format!("LetterboxInBreaks: {}\n", self.letterbox_in_breaks as u8);
-        display_string += &format!("UseSkinSprites: {}\n", self.use_skin_sprites as u8);
-        display_string += &format!("OverlayPosition: {}\n", self.overlay_position);
-        display_string += &format!("SkinPreference: {}\n", self.skin_preference);
-        display_string += &format!("EpilepsyWarning: {}\n", self.epilepsy_warning as u8);
-        display_string += &format!("CountdownOffset: {}\n", self.countdown_offset);
-        display_string += &format!("SpecialStyle: {}\n", self.special_style as u8);
-        display_string += &format!(
-            "WidescreenStoryboard: {}\n",
-            self.widescreen_storyboard as u8
-        );
-        display_string += &format!(
-            "SamplesMatchSpeed: {}\n",
-            self.samples_match_playback_rate as u8
-        );
+        if let Some(audio_lead_in) = self.audio_lead_in {
+            display_string += &format!("AudioLeadIn: {}\n", audio_lead_in);
+        }
+        if let Some(preview_time) = self.preview_time {
+            display_string += &format!("PreviewTime: {}\n", preview_time);
+        }
+        if let Some(countdown) = self.countdown {
+            display_string += &format!("Countdown: {}\n", countdown);
+        }
+        if let Some(sample_set) = self.sample_set {
+            display_string += &format!("SampleSet: {}\n", sample_set);
+        }
+        if let Some(stack_leniency) = self.stack_leniency {
+            display_string += &format!("StackLeniency: {}\n", stack_leniency);
+        }
+        if let Some(mode) = self.mode {
+            display_string += &format!("Mode: {}\n", mode);
+        }
+        if let Some(letterbox_in_breaks) = self.letterbox_in_breaks {
+            display_string += &format!("LetterboxInBreaks: {}\n", letterbox_in_breaks as i32);
+        }
+        if let Some(use_skin_sprites) = self.use_skin_sprites {
+            display_string += &format!("UseSkinSprites: {}\n", use_skin_sprites as i32);
+        }
+        if let Some(overlay_position) = self.overlay_position {
+            display_string += &format!("OverlayPosition: {}\n", overlay_position);
+        }
+        if let Some(skin_preference) = &self.skin_preference {
+            display_string += &format!("SkinPreference: {}\n", skin_preference);
+        }
+        if let Some(epilepsy_warning) = self.epilepsy_warning {
+            display_string += &format!("EpilepsyWarning: {}\n", epilepsy_warning as i32);
+        }
+        if let Some(countdown_offset) = self.countdown_offset {
+            display_string += &format!("CountdownOffset: {}\n", countdown_offset);
+        }
+        if let Some(special_style) = self.special_style {
+            display_string += &format!("SpecialStyle: {}\n", special_style as i32);
+        }
+        if let Some(widescreen_storyboard) = self.widescreen_storyboard {
+            display_string += &format!("WidescreenStoryboard: {}\n", widescreen_storyboard as i32);
+        }
+        if let Some(samples_match_playback_rate) = self.samples_match_playback_rate {
+            display_string += &format!(
+                "SamplesMatchPlaybackRate: {}\n",
+                samples_match_playback_rate as i32
+            );
+        }
+
         write!(f, "{}", display_string)
     }
 }
@@ -161,66 +187,22 @@ impl General {
         let parts: Vec<&str> = value.split(':').map(|s| s.trim()).collect();
         let value = parts[1];
         match parts[0] {
-            "AudioFilename" => {
-                self.audio_file = OsString::from(value);
-            }
-            "AudioLeadIn" => {
-                if let Ok(n) = value.parse() {
-                    self.audio_lead_in = n;
-                }
-            }
-            "PreviewTime" => {
-                if let Ok(n) = value.parse() {
-                    self.preview_time = n;
-                }
-            }
-            "Countdown" => {
-                if let Ok(n) = value.parse() {
-                    self.countdown = n;
-                }
-            }
-            "SampleSet" => {
-                self.sample_set = SampleSet::from(value);
-            }
-            "StackLeniency" => {
-                if let Ok(n) = value.parse() {
-                    self.stack_leniency = n;
-                }
-            }
-            "Mode" => {
-                if let Ok(n) = value.parse() {
-                    self.mode = n;
-                }
-            }
-            "LetterboxInBreaks" => {
-                self.letterbox_in_breaks = value != "0";
-            }
-            "UseSkinSprites" => {
-                self.use_skin_sprites = value != "0";
-            }
-            "OverlayPosition" => {
-                self.overlay_position = OverlayPosition::from(value);
-            }
-            "SkinPreference" => {
-                self.skin_preference = value.to_string();
-            }
-            "EpilepsyWarning" => {
-                self.epilepsy_warning = value != "0";
-            }
-            "CountdownOffset" => {
-                if let Ok(n) = value.parse() {
-                    self.countdown_offset = n;
-                }
-            }
-            "SpecialStyle" => {
-                self.special_style = value != "0";
-            }
-            "WidescreenStoryboard" => {
-                self.widescreen_storyboard = value != "0";
-            }
-            "SamplesMatchPlaybackRate" => {
-                self.samples_match_playback_rate = value != "0";
-            }
+            "AudioFilename" => self.audio_file = Some(value.to_string()),
+            "AudioLeadIn" => self.audio_lead_in = Some(value.parse().unwrap()),
+            "PreviewTime" => self.preview_time = Some(value.parse().unwrap()),
+            "Countdown" => self.countdown = Some(value.parse().unwrap()),
+            "SampleSet" => self.sample_set = Some(SampleSet::from(value)),
+            "StackLeniency" => self.stack_leniency = Some(value.parse().unwrap()),
+            "Mode" => self.mode = Some(value.parse().unwrap()),
+            "LetterboxInBreaks" => self.letterbox_in_breaks = Some(value != "0"),
+            "UseSkinSprites" => self.use_skin_sprites = Some(value != "0"),
+            "OverlayPosition" => self.overlay_position = Some(OverlayPosition::from(value)),
+            "SkinPreference" => self.skin_preference = Some(value.to_string()),
+            "EpilepsyWarning" => self.epilepsy_warning = Some(value != "0"),
+            "CountdownOffset" => self.countdown_offset = Some(value.parse().unwrap()),
+            "SpecialStyle" => self.special_style = Some(value != "0"),
+            "WidescreenStoryboard" => self.widescreen_storyboard = Some(value != "0"),
+            "SamplesMatchPlaybackRate" => self.samples_match_playback_rate = Some(value != "0"),
             _ => {}
         }
     }

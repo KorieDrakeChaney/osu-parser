@@ -92,7 +92,7 @@ impl std::fmt::Display for Events {
             write!(f, "2,{},{}\n", osu_break.start_time, osu_break.end_time)?;
         }
         for event in &self.storyboards {
-            write!(f, "{}\n", event)?;
+            write!(f, "{}", event)?;
         }
         Ok(())
     }

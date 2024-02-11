@@ -9,16 +9,25 @@ pub struct Editor {
 
 impl std::fmt::Display for Editor {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "[Editor]\n")?;
-        write!(f, "Bookmarks: ")?;
-        for b in &self.bookmarks {
-            write!(f, "{},", b)?;
+        let mut display_string = String::from("[Editor]\n");
+        if !self.bookmarks.is_empty() {
+            display_string.push_str("Bookmarks: ");
+            for (index, bookmark) in self.bookmarks.iter().enumerate() {
+                if index == self.bookmarks.len() - 1 {
+                    display_string.push_str(&format!("{}", bookmark));
+                } else {
+                    display_string.push_str(&format!("{},", bookmark));
+                }
+            }
+            display_string.push_str("\n");
         }
-        write!(f, "\n")?;
-        write!(f, "DistanceSpacing: {}\n", self.distance_spacing)?;
-        write!(f, "BeatDivisor: {}\n", self.beat_divisor)?;
-        write!(f, "GridSize: {}\n", self.grid_size)?;
-        write!(f, "TimelineZoom: {}\n", self.timeline_zoom)
+
+        display_string.push_str(&format!("DistanceSpacing: {}\n", self.distance_spacing));
+        display_string.push_str(&format!("BeatDivisor: {}\n", self.beat_divisor));
+        display_string.push_str(&format!("GridSize: {}\n", self.grid_size));
+        display_string.push_str(&format!("TimelineZoom: {}\n", self.timeline_zoom));
+
+        write!(f, "{}", display_string)
     }
 }
 

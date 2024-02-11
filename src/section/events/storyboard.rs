@@ -151,7 +151,7 @@ impl Storyboard {
 impl std::fmt::Display for Storyboard {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let mut display_string = format!(
-            "Storyboard {},{},{},{},{},{}\n",
+            "{},{},{},{},{},{}\n",
             self.storyboard_type,
             self.layer,
             self.origin,
@@ -159,7 +159,10 @@ impl std::fmt::Display for Storyboard {
             self.offset_x,
             self.offset_y
         );
+
+        let scope = 0; // TODO: Implement scope for nested commands
         for command in &self.commands {
+            display_string += &" ".repeat(scope + 1);
             display_string += &format!("{}", command);
         }
         write!(f, "{}", display_string)

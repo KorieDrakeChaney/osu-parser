@@ -19,7 +19,7 @@ impl FadeCommand {
             }
         };
 
-        let start_time = match s[1].parse::<i32>() {
+        let start_time = match s[1].parse() {
             Ok(x) => x,
             Err(_) => {
                 return Err(std::io::Error::new(
@@ -29,7 +29,33 @@ impl FadeCommand {
             }
         };
 
-        let end_time = if s.len() <= 4 {
+        let has_end_opacity = (s.len() == 4 && s[s.len() - 2].is_empty()) || s.len() == 5;
+
+        let end_opacity = match s[s.len() - 1].parse() {
+            Ok(x) => x,
+            Err(_) => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidInput,
+                    format!("Invalid Command token: {}", s[s.len() - 1]),
+                ))
+            }
+        };
+
+        let start_opacity = if s[s.len() - 2].is_empty() || !has_end_opacity {
+            end_opacity
+        } else {
+            match s[s.len() - 2].parse() {
+                Ok(x) => x,
+                Err(_) => {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        format!("Invalid Command token: {}", s[s.len() - 2]),
+                    ))
+                }
+            }
+        };
+
+        let end_time = if s.len() == 4 && has_end_opacity {
             start_time
         } else {
             match s[2].parse() {
@@ -38,30 +64,6 @@ impl FadeCommand {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
                         format!("Invalid Command token: {}", s[2]),
-                    ))
-                }
-            }
-        };
-
-        let end_opacity: f32 = match s[s.len() - 1].parse() {
-            Ok(x) => x,
-            Err(_) => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    format!("Invalid Command token: {}", s[3]),
-                ))
-            }
-        };
-
-        let start_opacity: f32 = if s[s.len() - 2].is_empty() {
-            end_opacity
-        } else {
-            match s[s.len() - 2].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[3]),
                     ))
                 }
             }

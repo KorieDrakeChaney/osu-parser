@@ -39,6 +39,8 @@ impl MoveYCommand {
             }
         };
 
+        let has_end_position = (s.len() == 4 && s[s.len() - 2].is_empty()) || s.len() == 5;
+
         let end_y = match s[s.len() - 1].parse() {
             Ok(x) => x,
             Err(_) => {
@@ -49,7 +51,7 @@ impl MoveYCommand {
             }
         };
 
-        let start_y = if s[s.len() - 2].is_empty() {
+        let start_y = if s[s.len() - 2].is_empty() || !has_end_position {
             end_y
         } else {
             match s[s.len() - 2].parse() {
@@ -63,7 +65,7 @@ impl MoveYCommand {
             }
         };
 
-        let end_time = if s.len() <= 4 {
+        let end_time = if s.len() == 4 && has_end_position {
             start_time
         } else {
             match s[2].parse() {

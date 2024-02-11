@@ -32,9 +32,9 @@ impl Colour {
 impl std::fmt::Display for Colour {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            Colour::ComboColor(n, c) => write!(f, "Combo{}:{}\n", n, c),
-            Colour::SliderTrackOverride(c) => write!(f, "SliderTrackOverride:{}\n", c),
-            Colour::SliderBorder(c) => write!(f, "SliderBorder:{}\n", c),
+            Colour::ComboColor(n, c) => write!(f, "Combo{} :{}\n", n, c),
+            Colour::SliderTrackOverride(c) => write!(f, "SliderTrackOverride :{}\n", c),
+            Colour::SliderBorder(c) => write!(f, "SliderBorder :{}\n", c),
         }
     }
 }

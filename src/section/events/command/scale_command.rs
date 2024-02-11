@@ -29,7 +29,33 @@ impl ScaleCommand {
             }
         };
 
-        let end_time = if s.len() <= 4 {
+        let has_end_scale = (s.len() == 4 && s[s.len() - 2].is_empty()) || s.len() == 5;
+
+        let end_scale = match s[s.len() - 1].parse() {
+            Ok(x) => x,
+            Err(_) => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidInput,
+                    format!("Invalid Command token: {}", s[s.len() - 1]),
+                ))
+            }
+        };
+
+        let start_scale = if s[s.len() - 2].is_empty() || !has_end_scale {
+            end_scale
+        } else {
+            match s[s.len() - 2].parse() {
+                Ok(x) => x,
+                Err(_) => {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        format!("Invalid Command token: {}", s[s.len() - 2]),
+                    ))
+                }
+            }
+        };
+
+        let end_time = if s.len() == 4 && has_end_scale {
             start_time
         } else {
             match s[2].parse() {
@@ -38,42 +64,6 @@ impl ScaleCommand {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
                         format!("Invalid Command token: {}", s[2]),
-                    ))
-                }
-            }
-        };
-
-        let end_scale: f32 = if s.len() == 4 {
-            match s[3].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[3]),
-                    ))
-                }
-            }
-        } else {
-            match s[4].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[3]),
-                    ))
-                }
-            }
-        };
-
-        let start_scale: f32 = if s[s.len() - 2].is_empty() {
-            end_scale
-        } else {
-            match s[s.len() - 2].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[3]),
                     ))
                 }
             }

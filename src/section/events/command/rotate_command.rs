@@ -39,7 +39,33 @@ impl RotateCommand {
             }
         };
 
-        let end_time = if s.len() <= 4 {
+        let has_end_angle = (s.len() == 4 && s[s.len() - 2].is_empty()) || s.len() == 5;
+
+        let end_angle = match s[s.len() - 1].parse() {
+            Ok(x) => x,
+            Err(_) => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidInput,
+                    format!("Invalid Rotate Command token: {}", s[s.len() - 1]),
+                ))
+            }
+        };
+
+        let start_angle = if s[s.len() - 2].is_empty() || !has_end_angle {
+            end_angle
+        } else {
+            match s[s.len() - 2].parse() {
+                Ok(x) => x,
+                Err(_) => {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        format!("Invalid Rotate Command token: {}", s[s.len() - 2]),
+                    ))
+                }
+            }
+        };
+
+        let end_time = if s.len() == 4 && has_end_angle {
             start_time
         } else {
             match s[2].parse() {
@@ -48,30 +74,6 @@ impl RotateCommand {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
                         format!("Invalid Command token: {}", s[2]),
-                    ))
-                }
-            }
-        };
-
-        let end_angle: f32 = match s[s.len() - 1].parse() {
-            Ok(x) => x,
-            Err(_) => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    format!("Invalid Command token: {}", s[3]),
-                ))
-            }
-        };
-
-        let start_angle: f32 = if s[s.len() - 2].is_empty() {
-            end_angle
-        } else {
-            match s[s.len() - 2].parse() {
-                Ok(x) => x,
-                Err(_) => {
-                    return Err(std::io::Error::new(
-                        std::io::ErrorKind::InvalidInput,
-                        format!("Invalid Command token: {}", s[3]),
                     ))
                 }
             }

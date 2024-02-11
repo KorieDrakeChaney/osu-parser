@@ -16,7 +16,7 @@ fn main() {
     // Change the title of the beatmap
     beatmap.change_metadata_title("@KorieDrakeChaney was here");
     // Save the beatmap to the directory it was originally loaded from
-    beatmap.save_to_directory("example1");
+    beatmap.save_to_directory();
     // Prints the beatmap
     println!("{}", beatmap);
 }

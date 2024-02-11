@@ -9,18 +9,6 @@ pub enum StoryboardType {
     Sample(SampleType),
 }
 
-impl From<&str> for StoryboardType {
-    fn from(s: &str) -> Self {
-        let parts = s.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
-        match parts[0] {
-            "Sprite" => StoryboardType::Sprite(SpriteType::from(s)),
-            "Animation" => StoryboardType::Animation(AnimationType::from(s)),
-            "Sample" => StoryboardType::Sample(SampleType::from(s)),
-            _ => todo!(),
-        }
-    }
-}
-
 impl std::fmt::Display for StoryboardType {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
@@ -145,14 +133,14 @@ pub struct SpriteType {
     offset_y: f32,
 }
 
-impl From<&str> for SpriteType {
-    fn from(s: &str) -> Self {
-        let parts = s.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
-        let layer = StoryboardLayer::from(parts[1]);
-        let origin = Origin::from(parts[2]);
-        let image_path = OsString::from(parts[3]);
-        let offset_x = parts[4].parse().unwrap();
-        let offset_y = parts[5].parse().unwrap();
+impl SpriteType {
+    pub fn new(
+        layer: StoryboardLayer,
+        origin: Origin,
+        image_path: OsString,
+        offset_x: f32,
+        offset_y: f32,
+    ) -> Self {
         SpriteType {
             layer,
             origin,
@@ -189,17 +177,17 @@ pub struct AnimationType {
     loop_type: LoopType,
 }
 
-impl From<&str> for AnimationType {
-    fn from(s: &str) -> Self {
-        let parts = s.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
-        let layer = StoryboardLayer::from(parts[1]);
-        let origin = Origin::from(parts[2]);
-        let image_path = OsString::from(parts[3]);
-        let offset_x = parts[4].parse().unwrap();
-        let offset_y = parts[5].parse().unwrap();
-        let frame_count = parts[6].parse().unwrap();
-        let frame_delay = parts[7].parse().unwrap();
-        let loop_type = LoopType::from(parts[8]);
+impl AnimationType {
+    pub fn new(
+        layer: StoryboardLayer,
+        origin: Origin,
+        image_path: OsString,
+        offset_x: f32,
+        offset_y: f32,
+        frame_count: i32,
+        frame_delay: i32,
+        loop_type: LoopType,
+    ) -> Self {
         AnimationType {
             layer,
             origin,
@@ -238,13 +226,8 @@ pub struct SampleType {
     time: i32,
 }
 
-impl From<&str> for SampleType {
-    fn from(s: &str) -> Self {
-        let parts = s.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
-        let layer = StoryboardLayer::from(parts[1]);
-        let image_path = OsString::from(parts[2]);
-        let volume = parts[3].parse().unwrap();
-        let time = parts[4].parse().unwrap();
+impl SampleType {
+    pub fn new(layer: StoryboardLayer, image_path: OsString, volume: i32, time: i32) -> Self {
         SampleType {
             layer,
             image_path,
@@ -258,7 +241,8 @@ impl std::fmt::Display for SampleType {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(
             f,
-            "{},{},{}",
+            "Sample,{},{},{},{}",
+            self.layer,
             self.image_path.to_str().unwrap(),
             self.volume,
             self.time
@@ -276,7 +260,187 @@ impl Storyboard {
     pub fn parse(value: &str, commands: Vec<Command>) -> std::io::Result<Self> {
         let parts = value.split(',').map(|s| s.trim()).collect::<Vec<&str>>();
 
-        let storyboard_type = StoryboardType::from(value);
+        let storyboard_type = match parts[0] {
+            "Sprite" => {
+                let layer = if parts.len() > 1 {
+                    StoryboardLayer::from(parts[1])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let origin = if parts.len() > 2 {
+                    Origin::from(parts[2])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let image_path = if parts.len() > 3 {
+                    OsString::from(parts[3])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let offset_x = if parts.len() > 4 {
+                    parts[4].parse().unwrap()
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let offset_y = if parts.len() > 5 {
+                    parts[5].parse().unwrap()
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                StoryboardType::Sprite(SpriteType::new(
+                    layer, origin, image_path, offset_x, offset_y,
+                ))
+            }
+            "Animation" => {
+                let layer = if parts.len() > 1 {
+                    StoryboardLayer::from(parts[1])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let origin = if parts.len() > 2 {
+                    Origin::from(parts[2])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let image_path = if parts.len() > 3 {
+                    OsString::from(parts[3])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let offset_x = if parts.len() > 4 {
+                    parts[4].parse().unwrap()
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let offset_y = if parts.len() > 5 {
+                    parts[5].parse().unwrap()
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let frame_count = if parts.len() > 6 {
+                    parts[6].parse().unwrap()
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let frame_delay = if parts.len() > 7 {
+                    parts[7].parse().unwrap()
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let loop_type = if parts.len() > 8 {
+                    LoopType::from(parts[8])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                StoryboardType::Animation(AnimationType::new(
+                    layer,
+                    origin,
+                    image_path,
+                    offset_x,
+                    offset_y,
+                    frame_count,
+                    frame_delay,
+                    loop_type,
+                ))
+            }
+            "Sample" => {
+                let layer = if parts.len() > 1 {
+                    StoryboardLayer::from(parts[1])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let image_path = if parts.len() > 2 {
+                    OsString::from(parts[2])
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let volume = if parts.len() > 3 {
+                    parts[3].parse().unwrap()
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                let time = if parts.len() > 4 {
+                    parts[4].parse().unwrap()
+                } else {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!("Invalid data from {}", value),
+                    ));
+                };
+
+                StoryboardType::Sample(SampleType::new(layer, image_path, volume, time))
+            }
+            _ => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidInput,
+                    "Invalid Storyboard token",
+                ))
+            }
+        };
 
         Ok(Storyboard {
             storyboard_type,
